@@ -1,0 +1,65 @@
+services:
+  web:
+    image: php:8.2-apache
+    container_name: Syntax_Sanctuary
+    ports:
+      - "8000:80"
+    volumes:
+      - ./PROYECTO:/var/www/html
+    networks:
+      - red_web
+    restart: unless-stopped
+    command: >
+      /bin/sh -c "
+      (php -m | grep -q pdo_mysql || docker-php-ext-install pdo pdo_mysql mysqli) &&
+      chown -R www-data:www-data /var/www/html &&
+      chmod -R 775 /var/www/html &&
+      a2enmod proxy proxy_http rewrite &&
+      apache2-foreground"
+
+  mysql:
+    image: mysql:8.0
+    container_name: mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+    networks:
+      - red_web
+    restart: unless-stopped
+
+  # phpMyAdmin en http://localhost:8081
+  phpmyadmin:
+    image: phpmyadmin:latest
+    container_name: phpmyadmin
+    environment:
+      PMA_HOST: mysql
+      PMA_PORT: 3306
+      UPLOAD_LIMIT: 128M
+    ports:
+      - "8001:80"
+    depends_on:
+      - mysql
+    networks:
+      - red_web
+    restart: unless-stopped
+
+  cloudflare:
+    image: cloudflare/cloudflared:latest
+    container_name: cloudflare_tunnel_frontend
+    command: tunnel --no-autoupdate run --token ${TOKEN_DE_CLOUDFLARE}
+    networks:
+      - red_web
+    restart: always
+
+volumes:
+  mysql_data:
+
+# Declaración obligatoria de la red compartida
+networks:
+  red_web:
+    driver: bridge
+
