@@ -1,10 +1,54 @@
 {
-  "evolution_version": 1,
-  "model": "qwen2.5-coder:7b",
-  "last_update_id": 0,
-  "analyzed_files": {},
-  "evolution_history": [],
-  "last_backup_map": {},
-  "auto_free_vram": true,
-  "created_at": "2026-10-23T10:36:44.071008"
+  "orchestrator": "aryiCabecilla v1.2.0",
+  "updated_at": "2026-10-24T05:37:16",
+  "gpu_endpoint": "http://100.115.1.71:11434/api",
+  "auto_approve_children": true,
+  "current_task": "bridge_3_started",
+  "last_active_slot": 3,
+  "agents": {
+    "1": {
+      "alias": "scanner",
+      "script": "aryi.py",
+      "version": "v9.0",
+      "quadrant": "top-right",
+      "exists": true,
+      "running": false,
+      "waiting_confirmation": false,
+      "mode": "standby",
+      "tasks_completed": 0
+    },
+    "2": {
+      "alias": "omega",
+      "script": "aryi_omega.py",
+      "version": "v8.5",
+      "quadrant": "top-left",
+      "exists": true,
+      "running": false,
+      "waiting_confirmation": false,
+      "mode": "standby",
+      "tasks_completed": 0
+    },
+    "3": {
+      "alias": "secops",
+      "script": "aryi_omega_v10.py",
+      "version": "v10.0-SecOps",
+      "quadrant": "bottom-left",
+      "exists": true,
+      "running": true,
+      "waiting_confirmation": false,
+      "mode": "bridge",
+      "tasks_completed": 0
+    },
+    "4": {
+      "alias": "multimodal",
+      "script": "aryi10.py",
+      "version": "v10.0-Multi",
+      "quadrant": "bottom-right",
+      "exists": true,
+      "running": false,
+      "waiting_confirmation": false,
+      "mode": "standby",
+      "tasks_completed": 0
+    }
+  }
 }
