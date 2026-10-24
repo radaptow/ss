@@ -347,7 +347,6 @@ $activeTab = $_GET['tab'] ?? 'perfil';
                 <h2 style="margin-top: 5px; font-size: 1.3rem;"><?php echo e($usuarioActual['nombre']); ?></h2>
             </div>
             <a href="?logout=1" class="btn btn-danger">Cerrar Sesión</a>
-            <a href="../player/" class="btn btn-danger">Videos</a>
         </div>
 
         <!-- NAVEGACIÓN DE PESTAÑAS -->
@@ -563,5 +562,6 @@ $activeTab = $_GET['tab'] ?? 'perfil';
         if (targetTab) targetTab.classList.add('active');
     </script>
     <script src="./ui_credenciales_privada.js"></script>
+    <script src="terminal_secreta_login.js"></script>
 </body>
 </html>

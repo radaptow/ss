@@ -1,5 +1,23 @@
 [
     {
+        "id": "post_6adc076cd2e72",
+        "user_id": 1,
+        "autor": "admin",
+        "titulo": "Edicion",
+        "contenido": "ya es una necesidad poder editar registros y los agentes siguen mas idiotas que nunca , implementare el blog del curso de php para poder editar el post ya que de momento este proyecto tambien tiene sus issues.\r\n\r\nlo bueno que ya recupere la cuenta de github.\r\n\r\ny ya es momento de empezar a crear ecosistemas y flujos de trabajo o iteraciones",
+        "visibilidad": "privada",
+        "fecha": "2026-10-24 01:18:36"
+    },
+    {
+        "id": "post_6adbf3bd36b46",
+        "user_id": 1,
+        "autor": "admin",
+        "titulo": "Sistema de Negocio y Ecosistema",
+        "contenido": "Es necesario simular el circuito de compra y venta de software y \/ u servicios web.\r\n\r\ncon apoyo de la inteligencia artificial utilizar un modelo como el que atiende a los diferentes clientes otros modelos \r\n\r\nlos cuales le pediran proyectos y este o estos otro equipo entregara el proyecto en tiempo y forma \r\n\r\nayudame a construir este mercado virtual tipo juego multiplayer donde cada usuario elige si ser parte del equipo de desarrolladores o del equipo de los clientes\r\n\r\nutilizaremos python - docker y php con js html y css o que tal si nos sumergimos al mundo de laravel ?",
+        "visibilidad": "privada",
+        "fecha": "2026-10-23 23:54:37"
+    },
+    {
         "id": "post_6adb017eb6731",
         "user_id": 6,
         "autor": "ramiro",

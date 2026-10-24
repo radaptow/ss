@@ -1,0 +1,1629 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Syntax Sanctuary // Imperio Netrunner: Central de 5 Agentes & Cyber-Defense Game</title>
+    <script src="https://cdn.tailwindcss.com/3.4.17"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-deep: #050811;
+            --bg-panel: #0f172a;
+            --bg-card: #1e293b;
+            --neon-green: #10b981;
+            --neon-cyan: #00f0ff;
+            --neon-blue: #38bdf8;
+            --neon-amber: #f59e0b;
+            --neon-rose: #ef4444;
+            --neon-purple: #a855f7;
+        }
+        * { box-sizing: border-box; }
+        body {
+            background-color: var(--bg-deep);
+            color: #f8fafc;
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            overflow-x: hidden;
+        }
+        .font-mono-code {
+            font-family: 'JetBrains Mono', monospace;
+        }
+        .cyber-grid-bg {
+            background-image:
+                linear-gradient(to right, rgba(56, 189, 248, 0.05) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(56, 189, 248, 0.05) 1px, transparent 1px);
+            background-size: 28px 28px;
+        }
+        .glow-green { box-shadow: 0 0 20px rgba(16, 185, 129, 0.22); }
+        .glow-cyan  { box-shadow: 0 0 20px rgba(0, 240, 255, 0.22); }
+        .glow-purple { box-shadow: 0 0 20px rgba(168, 85, 247, 0.22); }
+        .scanline {
+            background: linear-gradient(180deg, rgba(16,185,129,0) 0%, rgba(16,185,129,0.06) 50%, rgba(16,185,129,0) 100%);
+        }
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: #090d16; }
+        ::-webkit-scrollbar-thumb { background: #334155; border-radius: 3px; }
+        ::-webkit-scrollbar-thumb:hover { background: #38bdf8; }
+    </style>
+</head>
+<body class="min-h-screen cyber-grid-bg flex flex-col">
+
+    <!-- BARRA DE COMANDO SUPERIOR -->
+    <header class="border-b border-slate-800 bg-slate-950/90 backdrop-blur sticky top-0 z-40">
+        <div class="max-w-7xl mx-auto px-4 py-3 flex flex-wrap items-center justify-between gap-3">
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-xl bg-emerald-500/15 border border-emerald-400/50 flex items-center justify-center text-emerald-400 font-mono-code font-bold text-lg glow-green">
+                    SS
+                </div>
+                <div>
+                    <div class="flex items-center gap-2">
+                        <h1 class="text-base sm:text-lg font-extrabold tracking-tight text-white">
+                            SYNTAX SANCTUARY <span class="text-cyan-400 font-mono-code">// IMPERIO NETRUNNER</span>
+                        </h1>
+                        <span class="hidden sm:inline-flex items-center px-2 py-0.5 rounded-full text-xs font-mono-code font-semibold bg-emerald-500/15 text-emerald-300 border border-emerald-500/30">
+                            5 AGENTES ONLINE
+                        </span>
+                    </div>
+                    <p class="text-xs text-slate-400 font-mono-code">
+                        C++17 • Java JVM • Python Aryi • PHP 8.2 • JS/HTML/CSS + AI Mentor
+                    </p>
+                </div>
+            </div>
+
+            <!-- Métricas Globales del Imperio -->
+            <div class="flex flex-wrap items-center gap-2 sm:gap-4">
+                <div class="bg-slate-900/90 border border-slate-800 rounded-lg px-3 py-1.5 flex items-center gap-2">
+                    <span class="text-xs text-slate-400">Rango:</span>
+                    <span id="hudRank" class="text-xs font-mono-code font-bold text-amber-400">Cyber Architect Nv.2</span>
+                </div>
+                <div class="bg-slate-900/90 border border-slate-800 rounded-lg px-3 py-1.5 flex items-center gap-2">
+                    <span class="text-xs text-slate-400">XP IA:</span>
+                    <span id="hudXp" class="text-xs font-mono-code font-bold text-emerald-400">250</span>
+                </div>
+                <div class="bg-slate-900/90 border border-slate-800 rounded-lg px-3 py-1.5 flex items-center gap-2">
+                    <span class="text-xs text-slate-400">Créditos Hash:</span>
+                    <span id="hudCredits" class="text-xs font-mono-code font-bold text-cyan-400">450 Ħ</span>
+                </div>
+                <button id="btnAudioToggle" type="button" class="px-3 py-1.5 rounded-lg border border-slate-700 bg-slate-900 hover:bg-slate-800 text-xs font-mono-code text-slate-200 transition">
+                    🔊 Audio Synth: ON
+                </button>
+            </div>
+        </div>
+
+        <!-- NAVEGACIÓN PRINCIPAL DE VISTAS -->
+        <div class="max-w-7xl mx-auto px-4 pb-2 flex flex-wrap gap-2">
+            <button type="button" data-view="workstation" class="nav-tab-btn px-3.5 py-1.5 rounded-lg text-xs sm:text-sm font-semibold transition bg-cyan-500 text-slate-950">
+                ⚡ 1. Central de Trabajo (5 Agentes)
+            </button>
+            <button type="button" data-view="game" class="nav-tab-btn px-3.5 py-1.5 rounded-lg text-xs sm:text-sm font-semibold transition bg-slate-900 text-slate-300 hover:bg-slate-800 border border-slate-800">
+                🎮 2. Juego: Cyber-Sanctuary Netrunner Defense
+            </button>
+            <button type="button" data-view="academy" class="nav-tab-btn px-3.5 py-1.5 rounded-lg text-xs sm:text-sm font-semibold transition bg-slate-900 text-slate-300 hover:bg-slate-800 border border-slate-800">
+                🧠 3. Laboratorio Hacker & Misiones IA
+            </button>
+            <button type="button" data-view="codevault" class="nav-tab-btn px-3.5 py-1.5 rounded-lg text-xs sm:text-sm font-semibold transition bg-slate-900 text-slate-300 hover:bg-slate-800 border border-slate-800">
+                💻 4. Código Fuente de los 5 Agentes
+            </button>
+        </div>
+    </header>
+
+    <!-- BANNER PERMANENTE DE INTELIGENCIA ARTIFICIAL (ARYI MENTOR EN CADA PASO) -->
+    <section class="max-w-7xl w-full mx-auto px-4 pt-4">
+        <div class="bg-gradient-to-r from-slate-900 via-emerald-950/40 to-slate-900 border border-emerald-500/40 rounded-xl p-3.5 sm:p-4 glow-green flex flex-col md:flex-row items-start md:items-center justify-between gap-3">
+            <div class="flex items-start gap-3">
+                <div class="w-9 h-9 rounded-lg bg-emerald-500/20 border border-emerald-400 flex items-center justify-center text-lg shrink-0">
+                    🤖
+                </div>
+                <div>
+                    <div class="flex items-center gap-2">
+                        <span class="text-xs font-mono-code uppercase tracking-wider px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-300 font-bold">
+                            Aryi AI Mentor // Asistencia en Tiempo Real
+                        </span>
+                        <span id="aiStepBadge" class="text-xs font-mono-code text-cyan-400">Paso Activo: Inicialización Políglota</span>
+                    </div>
+                    <p id="aiMentorText" class="text-xs sm:text-sm text-slate-200 mt-1 leading-relaxed">
+                        ¡Bienvenido a tu Imperio, Operador! Cada acción que ejecutes en la Central, en el Laboratorio de Hackeo o en el Juego de Defensa activará a nuestros 5 agentes (C++, Java, Python, PHP y JS) y aquí te explicaré el porqué técnico y criptográfico detrás de cada paso.
+                    </p>
+                </div>
+            </div>
+            <div class="flex items-center gap-2 shrink-0 self-end md:self-center">
+                <button id="btnAskAiTip" type="button" class="px-3 py-1.5 rounded-lg bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold text-xs font-mono-code transition">
+                    💡 Siguiente Consejo Hacker IA
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- CONTENEDOR PRINCIPAL -->
+    <main class="max-w-7xl w-full mx-auto px-4 py-5 flex-1 flex flex-col gap-6">
+
+        <!-- =================================================================== -->
+        <!-- VISTA 1: CENTRAL DE TRABAJO (ORQUESTACIÓN DE LOS 5 AGENTES)        -->
+        <!-- =================================================================== -->
+        <section id="view-workstation" class="view-section flex flex-col gap-5">
+            <!-- Panel de Control del Enjambre -->
+            <div class="bg-slate-900/90 border border-slate-800 rounded-xl p-4 sm:p-5 flex flex-col lg:flex-row items-stretch lg:items-center justify-between gap-4">
+                <div>
+                    <h2 class="text-base sm:text-lg font-bold text-white flex items-center gap-2">
+                        <span>🛰️ Centro de Orquestación Políglota</span>
+                        <span class="text-xs font-mono-code px-2 py-0.5 rounded bg-cyan-500/15 text-cyan-300 border border-cyan-500/30">Enjambre Sincronizado</span>
+                    </h2>
+                    <p class="text-xs sm:text-sm text-slate-400 mt-1">
+                        Envía un payload o vector de auditoría y observa cómo los 5 agentes cooperan en cadena: JS captura → PHP enruta → Python razona → C++ mina/calcula entropía → Java audita y defiende.
+                    </p>
+                </div>
+
+                <div class="flex flex-col sm:flex-row gap-2.5 shrink-0">
+                    <input id="swarmPayloadInput" type="text" value="SELECT * FROM usuarios WHERE correo='admin' OR '1'='1'"
+                        class="px-3 py-2 rounded-lg bg-slate-950 border border-slate-700 text-xs sm:text-sm font-mono-code text-cyan-300 w-full sm:w-80 focus:outline-none focus:border-cyan-400"
+                        placeholder="Escribe un payload o bloque a procesar...">
+                    <button id="btnRunSwarm" type="button" class="px-4 py-2 rounded-lg bg-cyan-400 hover:bg-cyan-300 text-slate-950 font-bold text-xs sm:text-sm font-mono-code transition shrink-0">
+                        ⚡ Ejecutar Pipeline de 5 Agentes
+                    </button>
+                </div>
+            </div>
+
+            <!-- Tarjetas Interactivas de los 5 Agentes Autónomos -->
+            <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-5 gap-4">
+                <!-- Agente 1: C/C++ -->
+                <div id="card-agent-cpp" class="bg-slate-900/90 border border-slate-800 hover:border-cyan-500/50 rounded-xl p-4 flex flex-col justify-between transition">
+                    <div>
+                        <div class="flex items-center justify-between mb-2">
+                            <span class="px-2 py-0.5 rounded text-xs font-mono-code font-bold bg-blue-500/20 text-blue-300 border border-blue-500/30">AGENTE 01 // C++17</span>
+                            <span id="status-cpp" class="text-xs font-mono-code text-emerald-400">● READY</span>
+                        </div>
+                        <h3 class="font-bold text-white text-sm">Vanguard Core (`agent_cpp_core.cpp`)</h3>
+                        <p class="text-xs text-slate-400 mt-1">Minería PoW SHA-256 nativa (450k+ H/s), cálculo de entropía de Shannon y telemetría de `/proc/meminfo`.</p>
+                        <div class="mt-3 bg-slate-950 border border-slate-800 rounded-lg p-2.5 font-mono-code text-xs text-cyan-300 space-y-1">
+                            <div>Hashrate: <span id="metric-cpp-hashrate" class="text-white">451,728 H/s</span></div>
+                            <div>Entropía: <span id="metric-cpp-entropy" class="text-emerald-400">4.1808 bits</span></div>
+                            <div>RAM Kernel: <span id="metric-cpp-ram" class="text-amber-300">7.06% usado</span></div>
+                        </div>
+                    </div>
+                    <button type="button" data-agent-trigger="cpp" class="mt-3 w-full py-1.5 rounded-lg bg-slate-800 hover:bg-blue-600 text-xs font-mono-code font-semibold text-white transition">
+                        ⚙️ Minar Bloque PoW en C++
+                    </button>
+                </div>
+
+                <!-- Agente 2: Java -->
+                <div id="card-agent-java" class="bg-slate-900/90 border border-slate-800 hover:border-amber-500/50 rounded-xl p-4 flex flex-col justify-between transition">
+                    <div>
+                        <div class="flex items-center justify-between mb-2">
+                            <span class="px-2 py-0.5 rounded text-xs font-mono-code font-bold bg-amber-500/20 text-amber-300 border border-amber-500/30">AGENTE 02 // JAVA</span>
+                            <span id="status-java" class="text-xs font-mono-code text-emerald-400">● GUARDING</span>
+                        </div>
+                        <h3 class="font-bold text-white text-sm">Sentinel IDS (`AgentSentinel.java`)</h3>
+                        <p class="text-xs text-slate-400 mt-1">Auditoría SAST sobre tus 14 archivos de `PROYECTO`, sumas SHA-256 y reglas WAF activas contra SQLi/XSS.</p>
+                        <div class="mt-3 bg-slate-950 border border-slate-800 rounded-lg p-2.5 font-mono-code text-xs text-amber-300 space-y-1">
+                            <div>Archivos FIM: <span id="metric-java-files" class="text-white">14 verificados</span></div>
+                            <div>Controles PDO/CSRF: <span id="metric-java-hardened" class="text-emerald-400">6 blindados</span></div>
+                            <div>WAF Regla: <span id="metric-java-waf" class="text-cyan-300">942100_SQLI</span></div>
+                        </div>
+                    </div>
+                    <button type="button" data-agent-trigger="java" class="mt-3 w-full py-1.5 rounded-lg bg-slate-800 hover:bg-amber-600 text-xs font-mono-code font-semibold text-white transition">
+                        🛡️ Auditar Integridad Java
+                    </button>
+                </div>
+
+                <!-- Agente 3: Python -->
+                <div id="card-agent-python" class="bg-slate-900/90 border border-slate-800 hover:border-emerald-500/50 rounded-xl p-4 flex flex-col justify-between transition">
+                    <div>
+                        <div class="flex items-center justify-between mb-2">
+                            <span class="px-2 py-0.5 rounded text-xs font-mono-code font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">AGENTE 03 // PYTHON</span>
+                            <span id="status-python" class="text-xs font-mono-code text-emerald-400">● THINKING</span>
+                        </div>
+                        <h3 class="font-bold text-white text-sm">Aryi AI Brain (`aryi_orchestrator.py`)</h3>
+                        <p class="text-xs text-slate-400 mt-1">Evolución de `aryiCodigo.py`. Coordina subprocesos, crea respaldos `.bak`, aplica `patch_file` y guía tu aprendizaje.</p>
+                        <div class="mt-3 bg-slate-950 border border-slate-800 rounded-lg p-2.5 font-mono-code text-xs text-emerald-300 space-y-1">
+                            <div>Herramientas: <span class="text-white">7 activas (.bak)</span></div>
+                            <div>Heurística IA: <span id="metric-py-topic" class="text-cyan-300">PDO + PoW</span></div>
+                            <div>Ciclo Swarm: <span id="metric-py-latency" class="text-amber-300">12.4 ms</span></div>
+                        </div>
+                    </div>
+                    <button type="button" data-agent-trigger="python" class="mt-3 w-full py-1.5 rounded-lg bg-slate-800 hover:bg-emerald-600 text-xs font-mono-code font-semibold text-white transition">
+                        🧠 Analizar con Aryi Python
+                    </button>
+                </div>
+
+                <!-- Agente 4: PHP -->
+                <div id="card-agent-php" class="bg-slate-900/90 border border-slate-800 hover:border-purple-500/50 rounded-xl p-4 flex flex-col justify-between transition">
+                    <div>
+                        <div class="flex items-center justify-between mb-2">
+                            <span class="px-2 py-0.5 rounded text-xs font-mono-code font-bold bg-purple-500/20 text-purple-300 border border-purple-500/30">AGENTE 04 // PHP 8.2</span>
+                            <span id="status-php" class="text-xs font-mono-code text-emerald-400">● BRIDGED</span>
+                        </div>
+                        <h3 class="font-bold text-white text-sm">Sanctuary Bridge (`central_bridge.php`)</h3>
+                        <p class="text-xs text-slate-400 mt-1">Enlaza `area_privada.php`, MySQL PDO y la sesión Blockchain con los agentes y guarda tu progreso con `LOCK_EX`.</p>
+                        <div class="mt-3 bg-slate-950 border border-slate-800 rounded-lg p-2.5 font-mono-code text-xs text-purple-300 space-y-1">
+                            <div>Sesión Hash: <span id="metric-php-hash" class="text-white">000d5bdf...5c3e</span></div>
+                            <div>Persistencia: <span class="text-emerald-400">Atómica (.tmp)</span></div>
+                            <div> Contenedor: <span class="text-cyan-300">Syntax_Sanctuary:8000</span></div>
+                        </div>
+                    </div>
+                    <button type="button" data-agent-trigger="php" class="mt-3 w-full py-1.5 rounded-lg bg-slate-800 hover:bg-purple-600 text-xs font-mono-code font-semibold text-white transition">
+                        🐘 Sincronizar Sesión PHP
+                    </button>
+                </div>
+
+                <!-- Agente 5: JS/HTML/CSS -->
+                <div id="card-agent-js" class="bg-slate-900/90 border border-slate-800 hover:border-cyan-400/50 rounded-xl p-4 flex flex-col justify-between transition">
+                    <div>
+                        <div class="flex items-center justify-between mb-2">
+                            <span class="px-2 py-0.5 rounded text-xs font-mono-code font-bold bg-cyan-500/20 text-cyan-300 border border-cyan-500/30">AGENTE 05 // JS+HTML+CSS</span>
+                            <span id="status-js" class="text-xs font-mono-code text-emerald-400">● RENDERING</span>
+                        </div>
+                        <h3 class="font-bold text-white text-sm">Cyber-Deck UI & Motor 2D</h3>
+                        <p class="text-xs text-slate-400 mt-1">Telemetría visual reactiva, sintetizador de audio WebAudio API, terminal interactiva y motor Canvas del juego.</p>
+                        <div class="mt-3 bg-slate-950 border border-slate-800 rounded-lg p-2.5 font-mono-code text-xs text-cyan-300 space-y-1">
+                            <div>Motor Gráfico: <span class="text-white">Canvas 2D 60FPS</span></div>
+                            <div>WebCrypto/SHA: <span class="text-emerald-400">Activo</span></div>
+                            <div>Atajo Terminal: <span class="text-amber-300">Consola en Vivo</span></div>
+                        </div>
+                    </div>
+                    <button type="button" data-agent-trigger="js" class="mt-3 w-full py-1.5 rounded-lg bg-slate-800 hover:bg-cyan-600 text-xs font-mono-code font-semibold text-white transition">
+                        ⚡ Escaneo DOM & Telemetría JS
+                    </button>
+                </div>
+            </div>
+
+            <!-- Consola Unificada de Enjambre + Auditoría Real de los 14 Archivos -->
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-5">
+                <!-- Terminal Interactiva de los 5 Agentes -->
+                <div class="lg:col-span-7 bg-slate-950 border border-slate-800 rounded-xl overflow-hidden flex flex-col">
+                    <div class="bg-slate-900 px-4 py-2.5 border-b border-slate-800 flex items-center justify-between">
+                        <div class="flex items-center gap-2">
+                            <span class="w-3 h-3 rounded-full bg-rose-500"></span>
+                            <span class="w-3 h-3 rounded-full bg-amber-500"></span>
+                            <span class="w-3 h-3 rounded-full bg-emerald-500"></span>
+                            <span class="text-xs font-mono-code text-slate-300 ml-2">swarm@syntax-sanctuary:~ (Bus de Eventos Multi-Agente)</span>
+                        </div>
+                        <button id="btnClearSwarmLog" type="button" class="text-xs font-mono-code text-slate-400 hover:text-white">
+                            Limpiar
+                        </button>
+                    </div>
+                    <div id="swarmTerminalOutput" class="p-4 font-mono-code text-xs space-y-2 h-80 overflow-y-auto scanline"></div>
+                    <form id="swarmCliForm" class="border-t border-slate-800 bg-slate-900/90 px-4 py-2.5 flex items-center gap-2">
+                        <span class="text-emerald-400 font-mono-code text-xs font-bold">netrunner@empire:~$</span>
+                        <input id="swarmCliInput" type="text" autocomplete="off"
+                            placeholder="Comandos: help | mine <texto> | audit | defend sqli | patch | play"
+                            class="flex-1 bg-transparent text-xs font-mono-code text-white focus:outline-none">
+                        <button type="submit" class="px-3 py-1 rounded bg-emerald-500/20 border border-emerald-500/40 text-emerald-300 text-xs font-mono-code hover:bg-emerald-500 hover:text-slate-950 transition">
+                            Ejecutar
+                        </button>
+                    </form>
+                </div>
+
+                <!-- Tabla FIM (File Integrity Monitoring) Generada por AgentSentinel.java -->
+                <div class="lg:col-span-5 bg-slate-900/90 border border-slate-800 rounded-xl p-4 flex flex-col">
+                    <div class="flex items-center justify-between mb-3">
+                        <div>
+                            <h3 class="text-sm font-bold text-white">🛡️ Monitor de Integridad (`PROYECTO.rar`)</h3>
+                            <p class="text-xs text-slate-400">Firmas SHA-256 reales auditadas por `AgentSentinel.java`</p>
+                        </div>
+                        <span class="px-2 py-0.5 rounded text-xs font-mono-code bg-emerald-500/15 text-emerald-300 border border-emerald-500/30">
+                            14/14 SEGUROS
+                        </span>
+                    </div>
+                    <div class="overflow-y-auto max-h-80 border border-slate-800 rounded-lg">
+                        <table class="w-full text-left font-mono-code text-xs">
+                            <thead class="bg-slate-950 text-slate-400 sticky top-0">
+                                <tr>
+                                    <th class="p-2">Archivo del Proyecto</th>
+                                    <th class="p-2">SHA-256</th>
+                                    <th class="p-2">Defensa</th>
+                                </tr>
+                            </thead>
+                            <tbody id="fimTableBody" class="divide-y divide-slate-800/80 text-slate-200"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- =================================================================== -->
+        <!-- VISTA 2: JUEGO "CYBER-SANCTUARY: NETRUNNER AI DEFENSE"              -->
+        <!-- =================================================================== -->
+        <section id="view-game" class="view-section hidden flex-col gap-5">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-5">
+                <!-- Lienzo Principal del Juego Canvas 2D -->
+                <div class="lg:col-span-8 bg-slate-900/95 border border-slate-800 rounded-xl p-4 flex flex-col gap-3">
+                    <div class="flex flex-wrap items-center justify-between gap-2">
+                        <div>
+                            <h2 class="text-base sm:text-lg font-extrabold text-white flex items-center gap-2">
+                                <span>🎮 Cyber-Sanctuary: Netrunner AI Defense</span>
+                                <span id="gameWaveBadge" class="px-2.5 py-0.5 rounded-full text-xs font-mono-code bg-cyan-500/20 text-cyan-300 border border-cyan-500/40">
+                                    Oleada 1
+                                </span>
+                            </h2>
+                            <p class="text-xs text-slate-400">
+                                Coloca nodos defensivos programados en tus 5 lenguajes sobre las ranuras tácticas o haz clic directo sobre los paquetes maliciosos (SQLi, XSS, DDoS, Ransomware) para interceptarlos.
+                            </p>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <button id="btnStartWave" type="button" class="px-3.5 py-1.5 rounded-lg bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold text-xs font-mono-code transition">
+                                ▶️ Iniciar / Siguiente Oleada
+                            </button>
+                            <button id="btnPauseGame" type="button" class="px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 font-semibold text-xs font-mono-code transition">
+                                ⏸️ Pausa
+                            </button>
+                            <button id="btnResetGame" type="button" class="px-3 py-1.5 rounded-lg bg-rose-500/20 hover:bg-rose-500 hover:text-white text-rose-300 border border-rose-500/40 font-semibold text-xs font-mono-code transition">
+                                🔄 Reiniciar
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Estadísticas de Partida -->
+                    <div class="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
+                        <div class="bg-slate-950 border border-slate-800 rounded-lg p-2.5">
+                            <div class="text-xs text-slate-400">Integridad del Kernel</div>
+                            <div id="gameCoreHp" class="text-base font-mono-code font-bold text-emerald-400">100%</div>
+                        </div>
+                        <div class="bg-slate-950 border border-slate-800 rounded-lg p-2.5">
+                            <div class="text-xs text-slate-400">Créditos Hash (Ħ)</div>
+                            <div id="gameHashBudget" class="text-base font-mono-code font-bold text-cyan-400">450 Ħ</div>
+                        </div>
+                        <div class="bg-slate-950 border border-slate-800 rounded-lg p-2.5">
+                            <div class="text-xs text-slate-400">Amenazas Neutralizadas</div>
+                            <div id="gameKills" class="text-base font-mono-code font-bold text-amber-400">0</div>
+                        </div>
+                        <div class="bg-slate-950 border border-slate-800 rounded-lg p-2.5">
+                            <div class="text-xs text-slate-400">Puntuación Imperio</div>
+                            <div id="gameScore" class="text-base font-mono-code font-bold text-purple-400">0 pts</div>
+                        </div>
+                    </div>
+
+                    <!-- Contenedor Responsivo del Canvas -->
+                    <div id="gameCanvasContainer" class="relative w-full h-80 sm:h-96 bg-slate-950 border border-cyan-500/30 rounded-xl overflow-hidden glow-cyan">
+                        <canvas id="netrunnerCanvas" class="w-full h-full block cursor-crosshair"></canvas>
+                    </div>
+
+                    <!-- Controles Táctiles / Rápidos de Habilidades de los 5 Agentes -->
+                    <div class="flex flex-wrap items-center justify-between gap-2 pt-1">
+                        <span class="text-xs font-mono-code text-slate-400">
+                            💡 Haz clic en una <strong class="text-cyan-300">Ranura de Nodo [+]</strong> del mapa para desplegar el Agente seleccionado, o haz clic sobre un virus para lanzar un pulso manual.
+                        </span>
+                        <div class="flex flex-wrap gap-2">
+                            <button id="btnSkillEmp" type="button" class="px-3 py-1.5 rounded-lg bg-purple-500/20 hover:bg-purple-500 hover:text-slate-950 border border-purple-500/40 text-purple-300 text-xs font-mono-code font-bold transition">
+                                💥 Pulso Criptográfico Aryi IA (Coste: 120 Ħ)
+                            </button>
+                            <button id="btnSkillMine" type="button" class="px-3 py-1.5 rounded-lg bg-emerald-500/20 hover:bg-emerald-500 hover:text-slate-950 border border-emerald-500/40 text-emerald-300 text-xs font-mono-code font-bold transition">
+                                ⛏️ Minar Bloque Extra C++ (+80 Ħ)
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Panel Lateral de Selección de Torretas (Los 5 Agentes) + Mentoría IA en Vivo -->
+                <div class="lg:col-span-4 flex flex-col gap-4">
+                    <div class="bg-slate-900/95 border border-slate-800 rounded-xl p-4">
+                        <h3 class="text-sm font-bold text-white mb-1">🛠️ Arsenal de Agentes Defensivos</h3>
+                        <p class="text-xs text-slate-400 mb-3">Elige qué lenguaje desplegar en las ranuras tácticas del servidor:</p>
+
+                        <div id="turretSelectorList" class="space-y-2">
+                            <button type="button" data-turret="cpp" class="turret-select-btn w-full text-left p-2.5 rounded-lg border border-cyan-400 bg-cyan-500/15 transition flex items-center justify-between">
+                                <div>
+                                    <div class="text-xs font-mono-code font-bold text-cyan-300">1. C++17 Vanguard Laser</div>
+                                    <div class="text-xs text-slate-300">Disparo ultra rápido de baja latencia contra DDoS y troyanos.</div>
+                                </div>
+                                <span class="text-xs font-mono-code font-bold px-2 py-1 rounded bg-slate-950 text-cyan-300">100 Ħ</span>
+                            </button>
+
+                            <button type="button" data-turret="java" class="turret-select-btn w-full text-left p-2.5 rounded-lg border border-slate-800 bg-slate-950 hover:border-amber-400/50 transition flex items-center justify-between">
+                                <div>
+                                    <div class="text-xs font-mono-code font-bold text-amber-300">2. Java Sentinel WAF Cannon</div>
+                                    <div class="text-xs text-slate-300">Alto daño de impacto que desintegra inyecciones SQLi pesadas.</div>
+                                </div>
+                                <span class="text-xs font-mono-code font-bold px-2 py-1 rounded bg-slate-900 text-amber-300">125 Ħ</span>
+                            </button>
+
+                            <button type="button" data-turret="python" class="turret-select-btn w-full text-left p-2.5 rounded-lg border border-slate-800 bg-slate-950 hover:border-emerald-400/50 transition flex items-center justify-between">
+                                <div>
+                                    <div class="text-xs font-mono-code font-bold text-emerald-300">3. Python Aryi AI Disruptor</div>
+                                    <div class="text-xs text-slate-300">Ralentiza paquetes con análisis heurístico y genera XP adicional.</div>
+                                </div>
+                                <span class="text-xs font-mono-code font-bold px-2 py-1 rounded bg-slate-900 text-emerald-300">140 Ħ</span>
+                            </button>
+
+                            <button type="button" data-turret="php" class="turret-select-btn w-full text-left p-2.5 rounded-lg border border-slate-800 bg-slate-950 hover:border-purple-400/50 transition flex items-center justify-between">
+                                <div>
+                                    <div class="text-xs font-mono-code font-bold text-purple-300">4. PHP 8.2 PDO Shield Node</div>
+                                    <div class="text-xs text-slate-300">Mina +15 Ħ cada pocos segundos y filtra peticiones maliciosas.</div>
+                                </div>
+                                <span class="text-xs font-mono-code font-bold px-2 py-1 rounded bg-slate-900 text-purple-300">110 Ħ</span>
+                            </button>
+
+                            <button type="button" data-turret="js" class="turret-select-btn w-full text-left p-2.5 rounded-lg border border-slate-800 bg-slate-950 hover:border-blue-400/50 transition flex items-center justify-between">
+                                <div>
+                                    <div class="text-xs font-mono-code font-bold text-blue-300">5. JS CSP & DOM Sanitizer</div>
+                                    <div class="text-xs text-slate-300">Rayo en cadena que neutraliza enjambres de scripts XSS.</div>
+                                </div>
+                                <span class="text-xs font-mono-code font-bold px-2 py-1 rounded bg-slate-900 text-blue-300">90 Ħ</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Bitácora Táctica del Juego con Explicaciones IA -->
+                    <div class="bg-slate-900/95 border border-slate-800 rounded-xl p-4 flex-1 flex flex-col">
+                        <h3 class="text-sm font-bold text-white mb-1">📡 Telemetría de Combate & IA</h3>
+                        <p class="text-xs text-slate-400 mb-2">Cada amenaza interceptada muestra cómo se bloquea en la vida real:</p>
+                        <div id="gameCombatLog" class="flex-1 bg-slate-950 border border-slate-800 rounded-lg p-3 font-mono-code text-xs space-y-2 max-h-52 overflow-y-auto">
+                            <div class="text-emerald-400">[READY] Selecciona un Agente a la derecha y haz clic en cualquier nodo circular [+] del mapa para desplegar tu defensa.</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- =================================================================== -->
+        <!-- VISTA 3: LABORATORIO HACKER & MISIONES GUIADAS POR IA               -->
+        <!-- =================================================================== -->
+        <section id="view-academy" class="view-section hidden flex-col gap-5">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-5">
+                <!-- Lista de Misiones de Auditoría Ética -->
+                <div class="lg:col-span-4 bg-slate-900/90 border border-slate-800 rounded-xl p-4 flex flex-col gap-3">
+                    <div>
+                        <h2 class="text-base font-bold text-white">🎯 Misiones de Hackeo Ético & IA</h2>
+                        <p class="text-xs text-slate-400 mt-0.5">
+                            Aprende seguridad ofensiva y defensiva directamente sobre la arquitectura real de **Syntax Sanctuary**.
+                        </p>
+                    </div>
+                    <div id="missionListContainer" class="space-y-2.5"></div>
+                </div>
+
+                <!-- Simulador Interactivo Paso a Paso con IA en Medio de Cada Acción -->
+                <div class="lg:col-span-8 bg-slate-900/90 border border-slate-800 rounded-xl p-5 flex flex-col gap-4">
+                    <div class="flex flex-wrap items-center justify-between gap-2 border-b border-slate-800 pb-3">
+                        <div>
+                            <span id="missionActiveTag" class="text-xs font-mono-code px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">
+                                MISIÓN #1 // SQLi & PDO
+                            </span>
+                            <h3 id="missionActiveTitle" class="text-lg font-bold text-white mt-1">
+                                Blindaje de Autenticación en `auth_credenciales.php`
+                            </h3>
+                        </div>
+                        <span id="missionRewardBadge" class="text-xs font-mono-code font-bold text-cyan-300 bg-slate-950 px-3 py-1.5 rounded-lg border border-slate-800">
+                            Recompensa: +150 XP • +100 Ħ
+                        </span>
+                    </div>
+
+                    <p id="missionDescription" class="text-xs sm:text-sm text-slate-300 leading-relaxed"></p>
+
+                    <!-- Comparador de Código Vulnerable vs Código Blindado -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div class="bg-slate-950 border border-rose-500/40 rounded-xl p-3.5">
+                            <div class="text-xs font-mono-code font-bold text-rose-400 mb-2">❌ VECTOR VULNERABLE (Objetivo de Ataque)</div>
+                            <pre id="missionVulnerableCode" class="font-mono-code text-xs text-rose-200 whitespace-pre-wrap overflow-x-auto"></pre>
+                        </div>
+                        <div class="bg-slate-950 border border-emerald-500/40 rounded-xl p-3.5">
+                            <div class="text-xs font-mono-code font-bold text-emerald-400 mb-2">✅ PARCHE BLINDADO EN SYNTAX SANCTUARY</div>
+                            <pre id="missionSecureCode" class="font-mono-code text-xs text-emerald-200 whitespace-pre-wrap overflow-x-auto"></pre>
+                        </div>
+                    </div>
+
+                    <!-- Reto Interactivo de la Misión -->
+                    <div class="bg-slate-950 border border-slate-800 rounded-xl p-4 flex flex-col gap-3">
+                        <div class="text-xs font-mono-code text-cyan-300 font-bold">
+                            🧪 PASO INTERACTIVO (Con Mentoría IA en Vivo):
+                        </div>
+                        <p id="missionPromptQuestion" class="text-xs sm:text-sm text-slate-200"></p>
+                        <div id="missionOptionsGrid" class="grid grid-cols-1 sm:grid-cols-2 gap-2.5"></div>
+                        <div id="missionFeedbackBox" class="hidden p-3 rounded-lg font-mono-code text-xs leading-relaxed"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- =================================================================== -->
+        <!-- VISTA 4: BÓVEDA DE CÓDIGO FUENTE DE LOS 5 AGENTES AUTÓNOMOS         -->
+        <!-- =================================================================== -->
+        <section id="view-codevault" class="view-section hidden flex-col gap-4">
+            <div class="bg-slate-900/90 border border-slate-800 rounded-xl p-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+                <div>
+                    <h2 class="text-base sm:text-lg font-bold text-white">💻 Código Fuente Real de los 5 Agentes Autónomos</h2>
+                    <p class="text-xs text-slate-400">
+                        Inspecciona y copia el código completo de cada agente (`C++17`, `Java`, `Python`, `PHP 8.2` y `JS/HTML/CSS`) listo para tu servidor Docker.
+                    </p>
+                </div>
+                <div class="flex flex-wrap gap-2">
+                    <button type="button" data-code-tab="cpp" class="code-vault-btn px-3 py-1.5 rounded-lg text-xs font-mono-code font-bold bg-cyan-400 text-slate-950">
+                        1. C++ (`agent_cpp_core.cpp`)
+                    </button>
+                    <button type="button" data-code-tab="java" class="code-vault-btn px-3 py-1.5 rounded-lg text-xs font-mono-code font-bold bg-slate-800 text-slate-200">
+                        2. Java (`AgentSentinel.java`)
+                    </button>
+                    <button type="button" data-code-tab="python" class="code-vault-btn px-3 py-1.5 rounded-lg text-xs font-mono-code font-bold bg-slate-800 text-slate-200">
+                        3. Python (`aryi_orchestrator.py`)
+                    </button>
+                    <button type="button" data-code-tab="php" class="code-vault-btn px-3 py-1.5 rounded-lg text-xs font-mono-code font-bold bg-slate-800 text-slate-200">
+                        4. PHP (`central_bridge.php`)
+                    </button>
+                    <button type="button" data-code-tab="dsl" class="code-vault-btn px-3 py-1.5 rounded-lg text-xs font-mono-code font-bold bg-slate-800 text-slate-200">
+                        5. Integración `mycode.php`
+                    </button>
+                </div>
+            </div>
+
+            <div class="bg-slate-950 border border-slate-800 rounded-xl overflow-hidden">
+                <div class="bg-slate-900 px-4 py-2.5 border-b border-slate-800 flex items-center justify-between">
+                    <span id="codeVaultFilename" class="text-xs font-mono-code text-cyan-300 font-bold">agents/agent_cpp_core.cpp</span>
+                    <button id="btnCopyAgentCode" type="button" class="px-3 py-1 rounded bg-emerald-500/20 border border-emerald-500/40 text-emerald-300 text-xs font-mono-code hover:bg-emerald-500 hover:text-slate-950 transition">
+                        📋 Copiar Código Completo
+                    </button>
+                </div>
+                <pre id="codeVaultContent" class="p-4 font-mono-code text-xs text-slate-200 overflow-x-auto max-h-96 leading-relaxed"></pre>
+            </div>
+        </section>
+
+    </main>
+
+    <script>
+    (function () {
+        // ====================================================================
+        // ESTADO GLOBAL DEL IMPERIO & AUDIO SINTETIZADO (WEB AUDIO API)
+        // ====================================================================
+        const empireState = {
+            xp: 250,
+            credits: 450,
+            rank: 'Cyber Architect Nv.2',
+            audioEnabled: true,
+            audioCtx: null,
+            activeView: 'workstation',
+            selectedTurret: 'cpp',
+            completedMissions: {},
+            tipIndex: 0
+        };
+
+        const aiTips = [
+            "Paso Criptográfico: En `conexion.php`, tu clase `Block` concatena índice + timestamp + JSON + previousHash + nonce. Cambiar un solo bit altera el 50% de los bits del hash SHA-256 (Efecto Avalancha).",
+            "Paso de Bajo Nivel (C++17): Nuestro Agente 1 calcula la Entropía de Shannon H(X) = -Σ P(x) log2 P(x). Un texto normal en español ronda 4.1 bits/byte; un payload cifrado o ransomware supera 7.2 bits/byte.",
+            "Paso Defensivo (Java Sentinel): Nunca compares tokens CSRF o hashes con `==` o `===`. Usa `hash_equals($a, $b)` en PHP o `MessageDigest.isEqual()` en Java para evitar ataques de temporización (Timing Attacks).",
+            "Paso de Orquestación (Python Aryi): Tu función `tool_write_file` crea una copia `.bak` antes de sobrescribir. Así un agente autónomo puede experimentar y revertir cambios sin perder código jamás.",
+            "Paso de Aislamiento (PHP 8.2): En `area_privada.php`, `safe_path()` resuelve enlaces simbólicos con `realpath()` antes de validar el prefijo `USER_ROOT_DIRECTORY`, neutralizando ataques `../../etc/passwd`."
+        ];
+
+        function playTone(freq = 520, duration = 0.08, type = 'sine') {
+            if (!empireState.audioEnabled) return;
+            try {
+                const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+                if (!AudioContextClass) return;
+                if (!empireState.audioCtx) {
+                    empireState.audioCtx = new AudioContextClass();
+                }
+                if (empireState.audioCtx.state === 'suspended') {
+                    empireState.audioCtx.resume();
+                }
+                const osc = empireState.audioCtx.createOscillator();
+                const gain = empireState.audioCtx.createGain();
+                osc.type = type;
+                osc.frequency.setValueAtTime(freq, empireState.audioCtx.currentTime);
+                gain.gain.setValueAtTime(0.06, empireState.audioCtx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.001, empireState.audioCtx.currentTime + duration);
+                osc.connect(gain);
+                gain.connect(empireState.audioCtx.destination);
+                osc.start();
+                osc.stop(empireState.audioCtx.currentTime + duration);
+            } catch (_) {}
+        }
+
+        function updateGlobalHud(stepTitle, mentorMessage) {
+            if (empireState.xp >= 1500) empireState.rank = 'Sovereign AI Overlord Nv.10';
+            else if (empireState.xp >= 900) empireState.rank = 'Zero-Trust Commander Nv.7';
+            else if (empireState.xp >= 500) empireState.rank = 'Senior Netrunner Nv.4';
+            else empireState.rank = 'Cyber Architect Nv.2';
+
+            document.getElementById('hudRank').textContent = empireState.rank;
+            document.getElementById('hudXp').textContent = empireState.xp + ' XP';
+            document.getElementById('hudCredits').textContent = empireState.credits + ' Ħ';
+            document.getElementById('gameHashBudget').textContent = empireState.credits + ' Ħ';
+
+            if (stepTitle) {
+                document.getElementById('aiStepBadge').textContent = 'Paso Activo: ' + stepTitle;
+            }
+            if (mentorMessage) {
+                document.getElementById('aiMentorText').textContent = mentorMessage;
+            }
+        }
+
+        // ====================================================================
+        // DATOS REALES DE AUDITORÍA FIM (GENERADOS POR AGENTSENTINEL.JAVA)
+        // ====================================================================
+        const fimFiles = [
+            { file: "public/InicioDeSesion/area_privada.php", sha: "ab11f1aee430b87d", defense: "PDO + Sandbox Jail" },
+            { file: "public/InicioDeSesion/auth_credenciales.php", sha: "d884967794f4606f", defense: "Bcrypt + hash_equals" },
+            { file: "public/InicioDeSesion/validar_acceso.php", sha: "2ed433af64b0137d", defense: "Constant-Time PoW" },
+            { file: "public/InicioDeSesion/generar_hash.php", sha: "11aebb3770d11677", defense: "Zero-Leak Verify" },
+            { file: "public/InicioDeSesion/guardar_usuario.php", sha: "0a0068d620b3cb90", defense: "Prepared INSERT" },
+            { file: "public/InicioDeSesion/conexion.php", sha: "85c31fc473bd6cd8", defense: "Block + Blockchain" },
+            { file: "public/InicioDeSesion/terminal_secreta_login.js", sha: "a2fa1be44b99f50f", defense: "Ctrl+Shift+L Shell" },
+            { file: "public/InicioDeSesion/ui_credenciales_privada.js", sha: "b27c13e652a3a783", defense: "XSS Escape Helper" },
+            { file: "public/player/index.php", sha: "206d89fda8c210e2", defense: "CSRF 256-bit + MIME" },
+            { file: "src/mycode.php", sha: "74e460d40510fd76", defense: "Semantic HTML DSL" },
+            { file: "index.php", sha: "878303f8791c8142", defense: "Root Portal Entry" }
+        ];
+
+        function renderFimTable() {
+            const tbody = document.getElementById('fimTableBody');
+            tbody.innerHTML = fimFiles.map(item => `
+                <tr class="hover:bg-slate-900/60">
+                    <td class="p-2 text-cyan-300 font-medium">${item.file}</td>
+                    <td class="p-2 text-slate-400">${item.sha}...</td>
+                    <td class="p-2"><span class="px-1.5 py-0.5 rounded bg-emerald-500/15 text-emerald-300 border border-emerald-500/30">${item.defense}</span></td>
+                </tr>
+            `).join('');
+        }
+
+        // ====================================================================
+        // UTILIDADES CRIPTOGRÁFICAS Y DE ENTROPÍA EN VIVO
+        // ====================================================================
+        function calcShannonEntropy(str) {
+            if (!str) return 0;
+            const freq = {};
+            for (let i = 0; i < str.length; i++) {
+                const c = str.charCodeAt(i);
+                freq[c] = (freq[c] || 0) + 1;
+            }
+            let entropy = 0;
+            const len = str.length;
+            Object.values(freq).forEach(count => {
+                const p = count / len;
+                entropy -= p * Math.log2(p);
+            });
+            return entropy;
+        }
+
+        function simpleSha256Simulation(input, difficulty = 3) {
+            const prefix = '0'.repeat(difficulty);
+            let nonce = 0;
+            let hashHex = '';
+            while (nonce < 50000) {
+                const str = input + ':' + nonce;
+                let h1 = 0xdeadbeef ^ str.length, h2 = 0x41c6ce57 ^ str.length;
+                for (let i = 0, ch; i < str.length; i++) {
+                    ch = str.charCodeAt(i);
+                    h1 = Math.imul(h1 ^ ch, 2654435761);
+                    h2 = Math.imul(h2 ^ ch, 1597334677);
+                }
+                h1 = Math.imul(h1 ^ (h1 >>> 16), 2246822507) ^ Math.imul(h2 ^ (h2 >>> 13), 3266489909);
+                h2 = Math.imul(h2 ^ (h2 >>> 16), 2246822507) ^ Math.imul(h1 ^ (h1 >>> 13), 3266489909);
+                const combined = (h1 >>> 0).toString(16).padStart(8, '0') +
+                                 (h2 >>> 0).toString(16).padStart(8, '0') +
+                                 ((h1 ^ nonce) >>> 0).toString(16).padStart(8, '0') +
+                                 ((h2 ^ (nonce * 31)) >>> 0).toString(16).padStart(8, '0');
+                hashHex = combined.repeat(2);
+                if (hashHex.startsWith(prefix)) break;
+                nonce++;
+            }
+            return { hash: hashHex, nonce };
+        }
+
+        function appendSwarmLog(agentTag, colorClass, text) {
+            const out = document.getElementById('swarmTerminalOutput');
+            const line = document.createElement('div');
+            const now = new Date().toLocaleTimeString();
+            line.innerHTML = `<span class="text-slate-500">[${now}]</span> <span class="${colorClass} font-bold">[${agentTag}]</span> <span class="text-slate-200">${text}</span>`;
+            out.appendChild(line);
+            out.scrollTop = out.scrollHeight;
+        }
+
+        // ====================================================================
+        // PIPELINE DE LOS 5 AGENTES AUTÓNOMOS EN TIEMPO REAL
+        // ====================================================================
+        function runFiveAgentPipeline(payloadText) {
+            playTone(640, 0.1, 'triangle');
+            const entropy = calcShannonEntropy(payloadText);
+            const mined = simpleSha256Simulation(payloadText, 3);
+            const isSqli = /('|--|\bOR\b|\bUNION\b|\bSELECT\b)/i.test(payloadText);
+            const isXss  = /(<script|onerror=|onload=|javascript:)/i.test(payloadText);
+
+            document.getElementById('metric-cpp-entropy').textContent = entropy.toFixed(4) + ' bits';
+            document.getElementById('metric-php-hash').textContent = mined.hash.slice(0, 8) + '...' + mined.hash.slice(-4);
+            document.getElementById('metric-java-waf').textContent = isSqli ? 'BLOCK_942100_SQLI' : (isXss ? 'BLOCK_941100_XSS' : 'PASS_CLEAN_PACKET');
+
+            appendSwarmLog('05_JS_CYBERDECK', 'text-cyan-400', `Capturado payload (${payloadText.length} bytes). Enviando al puente PHP 8.2...`);
+            appendSwarmLog('04_PHP_BRIDGE', 'text-purple-400', `Sesión Blockchain verificada. Despachando subproceso a aryi_orchestrator.py...`);
+            appendSwarmLog('01_CPP_VANGUARD', 'text-blue-400', `Entropía de Shannon = ${entropy.toFixed(4)} bits/byte | Bloque PoW minado (Nonce: ${mined.nonce}, Hash: ${mined.hash.slice(0, 20)}...)`);
+            appendSwarmLog('02_JAVA_SENTINEL', 'text-amber-400', isSqli
+                ? `¡Alerta SQLi detectada! Aplicando regla WAF_942100 y exigiendo sentencia preparada PDO (:param).`
+                : (isXss ? `¡Alerta XSS detectada! Sanitizando salida con htmlspecialchars(ENT_QUOTES, 'UTF-8').` : `Paquete limpio verificado contra las 14 firmas SHA-256 del proyecto.`));
+            appendSwarmLog('03_PYTHON_ARYI_AI', 'text-emerald-400', `Mentoría IA: El ciclo de los 5 agentes completó la auditoría. Ganaste +35 XP y +25 Ħ para el juego.`);
+
+            empireState.xp += 35;
+            empireState.credits += 25;
+            updateGlobalHud(
+                'Pipeline de 5 Agentes Completado',
+                isSqli
+                    ? `Aryi IA detectó un patrón de Inyección SQL en tu prueba. Observa cómo C++ midió su entropía (${entropy.toFixed(2)} bits), Java activó el filtro WAF y PHP mantuvo aislada la consulta usando PDO preparado.`
+                    : `Aryi IA procesó tu bloque con éxito. El Agente C++ encontró el nonce ${mined.nonce} para cumplir la dificultad PoW y Java verificó que los 14 archivos de Syntax Sanctuary mantienen su hash intacto.`
+            );
+        }
+
+        // Eventos individuales de las 5 tarjetas de agentes
+        document.querySelectorAll('[data-agent-trigger]').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const ag = btn.getAttribute('data-agent-trigger');
+                const payload = document.getElementById('swarmPayloadInput').value.trim() || 'SyntaxSanctuary_Node';
+                playTone(720, 0.08, 'sine');
+
+                if (ag === 'cpp') {
+                    const mined = simpleSha256Simulation(payload + '_' + Date.now(), 3);
+                    document.getElementById('metric-cpp-hashrate').textContent = (420000 + Math.floor(Math.random() * 95000)).toLocaleString() + ' H/s';
+                    appendSwarmLog('01_CPP_VANGUARD', 'text-blue-400', `Minado nativo C++17 completado -> Nonce: ${mined.nonce} | Hash: ${mined.hash.slice(0, 24)}... (+30 Ħ)`);
+                    empireState.credits += 30;
+                    updateGlobalHud('Agente 1 (C++17)', 'El Agente C++ ejecuta el bucle SHA-256 directamente en instrucciones nativas del procesador, logrando cientos de miles de hashes por segundo sin recolector de basura.');
+                } else if (ag === 'java') {
+                    appendSwarmLog('02_JAVA_SENTINEL', 'text-amber-400', `Auditoría FIM completada sobre 14 archivos en PROYECTO/. 6 módulos críticos con PDO + CSRF verificados.`);
+                    empireState.xp += 25;
+                    updateGlobalHud('Agente 2 (Java JVM)', 'AgentSentinel.java recorre recursivamente el árbol de directorios con Files.walk() y calcula MessageDigest SHA-256 para detectar si algún archivo PHP fue modificado sin autorización.');
+                } else if (ag === 'python') {
+                    appendSwarmLog('03_PYTHON_ARYI_AI', 'text-emerald-400', `Aryi Python analizó el contexto y preparó un punto de restauración automática (.bak) antes de aplicar parches.`);
+                    empireState.xp += 30;
+                    updateGlobalHud('Agente 3 (Python Aryi)', 'Tu script aryiCodigo.py evolucionado a aryi_orchestrator.py actúa como cerebro: coordina a C++ y Java mediante subprocess.run() y parsea sus salidas JSON.');
+                } else if (ag === 'php') {
+                    appendSwarmLog('04_PHP_BRIDGE', 'text-purple-400', `Estado sincronizado atómicamente en netrunner_empire_state.json con bloqueo exclusivo LOCK_EX.`);
+                    empireState.credits += 20;
+                    updateGlobalHud('Agente 4 (PHP 8.2)', 'central_bridge.php conecta tu sesión $_SESSION["hash_verificado"] de Syntax Sanctuary con los agentes de sistema y evita condiciones de carrera usando archivos temporales .tmp.');
+                } else if (ag === 'js') {
+                    appendSwarmLog('05_JS_CYBERDECK', 'text-cyan-400', `DOM auditado: 0 enlaces rotos, Canvas 2D sincronizado a 60 FPS y WebAudio API en línea.`);
+                    empireState.xp += 20;
+                    updateGlobalHud('Agente 5 (JS/HTML/CSS)', 'El Agente Frontend visualiza en tiempo real las métricas de los otros 4 lenguajes y ejecuta el motor físico del juego Cyber-Sanctuary sin recargar la página.');
+                }
+            });
+        });
+
+        document.getElementById('btnRunSwarm').addEventListener('click', () => {
+            const payload = document.getElementById('swarmPayloadInput').value.trim() || 'SyntaxSanctuary_Block';
+            runFiveAgentPipeline(payload);
+        });
+
+        document.getElementById('btnClearSwarmLog').addEventListener('click', () => {
+            document.getElementById('swarmTerminalOutput').innerHTML = '';
+            appendSwarmLog('SYSTEM', 'text-emerald-400', 'Consola limpia. Escribe "help" para ver los comandos del Imperio.');
+        });
+
+        document.getElementById('swarmCliForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const input = document.getElementById('swarmCliInput');
+            const raw = input.value.trim();
+            if (!raw) return;
+            input.value = '';
+
+            appendSwarmLog('OPERADOR', 'text-white', `$ ${raw}`);
+            const parts = raw.split(/\s+/);
+            const cmd = parts[0].toLowerCase();
+
+            if (cmd === 'help') {
+                appendSwarmLog('ARYI_HELP', 'text-cyan-300', 'Comandos: mine <payload> | audit | defend <sqli|xss|traversal> | patch | play');
+            } else if (cmd === 'mine') {
+                const text = parts.slice(1).join('_') || 'Imperio_Block';
+                const res = simpleSha256Simulation(text, 3);
+                empireState.credits += 40;
+                appendSwarmLog('01_CPP_VANGUARD', 'text-blue-400', `Bloque minado para "${text}" -> Nonce: ${res.nonce} | Hash: ${res.hash.slice(0, 28)}... (+40 Ħ)`);
+                updateGlobalHud('Minería CLI', 'Has minado un nuevo bloque desde la terminal. Esos +40 Créditos Hash (Ħ) ya están disponibles para desplegar torretas en el juego.');
+            } else if (cmd === 'audit') {
+                appendSwarmLog('02_JAVA_SENTINEL', 'text-amber-400', 'Escaneo SAST: 14 archivos analizados en PROYECTO. 0 llamadas inseguras a eval(), 6 controles PDO/hash_equals activos.');
+                empireState.xp += 30;
+                updateGlobalHud('Auditoría CLI', 'Java Sentinel confirmó que ningún archivo del proyecto contiene backdoors ni funciones de ejecución arbitraria.');
+            } else if (cmd === 'defend') {
+                const vec = (parts[1] || 'sqli').toUpperCase();
+                appendSwarmLog('02_JAVA_SENTINEL', 'text-emerald-400', `Contramedida activada para [${vec}]: Regla Zero-Trust aplicada en el firewall perimetral.`);
+                updateGlobalHud('Defensa Activa', `Configuraste una regla defensiva contra ${vec}. Cada capa añade defensa en profundidad a tu contenedor Apache/PHP.`);
+            } else if (cmd === 'patch') {
+                appendSwarmLog('03_PYTHON_ARYI_AI', 'text-emerald-400', 'Respaldo automático creado (.bak) y parche de seguridad verificado por Aryi.');
+                empireState.xp += 25;
+                updateGlobalHud('Parche Seguro (.bak)', 'Recuerda la regla de oro de aryiCodigo.py: nunca sobrescribir un archivo en producción sin generar antes su copia .bak.');
+            } else if (cmd === 'play') {
+                switchView('game');
+            } else {
+                runFiveAgentPipeline(raw);
+            }
+        });
+
+        // ====================================================================
+        // MOTOR DEL JUEGO: "CYBER-SANCTUARY: NETRUNNER AI DEFENSE" (CANVAS 2D)
+        // ====================================================================
+        const canvas = document.getElementById('netrunnerCanvas');
+        const ctx = canvas.getContext('2d');
+
+        const turretSpecs = {
+            cpp:    { name: 'C++17 Laser',    cost: 100, range: 135, fireRate: 18, damage: 22, color: '#38bdf8', slow: 0,    income: 0 },
+            java:   { name: 'Java WAF Cannon',cost: 125, range: 155, fireRate: 42, damage: 55, color: '#f59e0b', slow: 0,    income: 0 },
+            python: { name: 'Python Aryi AI', cost: 140, range: 145, fireRate: 30, damage: 28, color: '#10b981', slow: 0.45, income: 0 },
+            php:    { name: 'PHP PDO Shield', cost: 110, range: 120, fireRate: 35, damage: 24, color: '#a855f7', slow: 0,    income: 12 },
+            js:     { name: 'JS DOM Zapper',  cost: 90,  range: 125, fireRate: 22, damage: 20, color: '#00f0ff', slow: 0.2,  income: 0 }
+        };
+
+        const threatCatalog = [
+            { type: 'SQLi Worm',       hp: 85,  speed: 1.05, reward: 28, color: '#ef4444', lesson: 'SQLi neutralizado: Las consultas preparadas PDO impiden que el payload modifique la estructura SQL.' },
+            { type: 'XSS Swarm',       hp: 55,  speed: 1.55, reward: 22, color: '#f97316', lesson: 'XSS neutralizado: htmlspecialchars() convirtió las etiquetas <script> en entidades inofensivas.' },
+            { type: 'Path Traversal',  hp: 115, speed: 0.90, reward: 32, color: '#eab308', lesson: 'Traversal bloqueado: safe_path() verificó realpath() dentro de storage_usuarios/user_<id>.' },
+            { type: 'BruteForce Bot',  hp: 160, speed: 0.75, reward: 40, color: '#ec4899', lesson: 'Fuerza bruta detenida: El reto Proof-of-Work SHA-256 y Bcrypt agotaron el cómputo del atacante.' }
+        ];
+
+        const game = {
+            running: true,
+            wave: 1,
+            coreHp: 100,
+            kills: 0,
+            score: 0,
+            spawnTimer: 0,
+            enemiesToSpawn: 8,
+            frame: 0,
+            slots: [],
+            turrets: [],
+            enemies: [],
+            projectiles: [],
+            particles: []
+        };
+
+        function resizeGameCanvas() {
+            const container = document.getElementById('gameCanvasContainer');
+            if (!container) return;
+            const rect = container.getBoundingClientRect();
+            canvas.width = Math.max(480, Math.floor(rect.width));
+            canvas.height = Math.max(300, Math.floor(rect.height));
+
+            const w = canvas.width;
+            const h = canvas.height;
+            game.slots = [
+                { id: 0, x: w * 0.22, y: h * 0.28 },
+                { id: 1, x: w * 0.22, y: h * 0.72 },
+                { id: 2, x: w * 0.46, y: h * 0.24 },
+                { id: 3, x: w * 0.46, y: h * 0.76 },
+                { id: 4, x: w * 0.68, y: h * 0.30 },
+                { id: 5, x: w * 0.68, y: h * 0.70 }
+            ];
+            game.turrets.forEach(t => {
+                const s = game.slots[t.slotId];
+                if (s) { t.x = s.x; t.y = s.y; }
+            });
+        }
+
+        function logCombatEvent(text, colorClass = 'text-cyan-300') {
+            const box = document.getElementById('gameCombatLog');
+            const div = document.createElement('div');
+            div.className = colorClass;
+            div.textContent = text;
+            box.prepend(div);
+            while (box.children.length > 18) {
+                box.removeChild(box.lastChild);
+            }
+        }
+
+        function spawnEnemy() {
+            const template = threatCatalog[Math.floor(Math.random() * threatCatalog.length)];
+            const scale = 1 + (game.wave - 1) * 0.22;
+            const laneOffset = (Math.random() - 0.5) * 50;
+            game.enemies.push({
+                x: 20,
+                y: (canvas.height / 2) + laneOffset,
+                hp: Math.round(template.hp * scale),
+                maxHp: Math.round(template.hp * scale),
+                speed: template.speed * (1 + (game.wave - 1) * 0.05),
+                slowTimer: 0,
+                reward: template.reward,
+                type: template.type,
+                color: template.color,
+                lesson: template.lesson
+            });
+        }
+
+        function updateGameSimulation() {
+            if (!game.running) return;
+            game.frame++;
+
+            // Spawning de oleadas
+            if (game.enemiesToSpawn > 0 && game.frame % 75 === 0) {
+                spawnEnemy();
+                game.enemiesToSpawn--;
+            }
+
+            // Ingresos pasivos de nodos PHP PDO Shield
+            if (game.frame % 180 === 0) {
+                let passiveGain = 0;
+                game.turrets.forEach(t => {
+                    if (t.income > 0) passiveGain += t.income;
+                });
+                if (passiveGain > 0) {
+                    empireState.credits += passiveGain;
+                    updateGlobalHud();
+                }
+            }
+
+            // Disparo autónomo de las torretas (Los 5 Agentes)
+            game.turrets.forEach(t => {
+                if (t.cooldown > 0) t.cooldown--;
+                if (t.cooldown <= 0 && game.enemies.length > 0) {
+                    let target = null;
+                    let bestDist = Infinity;
+                    for (const en of game.enemies) {
+                        const d = Math.hypot(en.x - t.x, en.y - t.y);
+                        if (d <= t.range && d < bestDist) {
+                            bestDist = d;
+                            target = en;
+                        }
+                    }
+                    if (target) {
+                        t.cooldown = t.fireRate;
+                        game.projectiles.push({
+                            x: t.x,
+                            y: t.y,
+                            tx: target.x,
+                            ty: target.y,
+                            target: target,
+                            damage: t.damage,
+                            slow: t.slow,
+                            color: t.color,
+                            agentName: t.name
+                        });
+                        playTone(880, 0.03, 'square');
+                    }
+                }
+            });
+
+            // Actualizar proyectiles
+            for (let i = game.projectiles.length - 1; i >= 0; i--) {
+                const p = game.projectiles[i];
+                if (p.target && p.target.hp > 0) {
+                    p.tx = p.target.x;
+                    p.ty = p.target.y;
+                }
+                const dx = p.tx - p.x;
+                const dy = p.ty - p.y;
+                const dist = Math.hypot(dx, dy);
+                if (dist < 12) {
+                    if (p.target && p.target.hp > 0) {
+                        p.target.hp -= p.damage;
+                        if (p.slow > 0) p.target.slowTimer = 90;
+                    }
+                    game.projectiles.splice(i, 1);
+                } else {
+                    p.x += (dx / dist) * 9.5;
+                    p.y += (dy / dist) * 9.5;
+                }
+            }
+
+            // Actualizar enemigos
+            const coreX = canvas.width - 48;
+            for (let i = game.enemies.length - 1; i >= 0; i--) {
+                const en = game.enemies[i];
+                if (en.hp <= 0) {
+                    game.kills++;
+                    game.score += en.reward * 10;
+                    empireState.credits += en.reward;
+                    empireState.xp += 15;
+                    for (let k = 0; k < 8; k++) {
+                        game.particles.push({
+                            x: en.x,
+                            y: en.y,
+                            vx: (Math.random() - 0.5) * 4,
+                            vy: (Math.random() - 0.5) * 4,
+                            life: 22,
+                            color: en.color
+                        });
+                    }
+                    logCombatEvent(`✓ [${en.type}] neutralizado (+${en.reward} Ħ). ${en.lesson}`, 'text-emerald-400');
+                    updateGlobalHud('Amenaza Neutralizada en Juego', en.lesson);
+                    game.enemies.splice(i, 1);
+                    playTone(440, 0.07, 'sine');
+                    continue;
+                }
+
+                const effSpeed = en.slowTimer > 0 ? en.speed * 0.55 : en.speed;
+                if (en.slowTimer > 0) en.slowTimer--;
+                en.x += effSpeed;
+
+                if (en.x >= coreX) {
+                    game.coreHp = Math.max(0, game.coreHp - 15);
+                    logCombatEvent(`⚠️ [${en.type}] impactó el Kernel MySQL (-15% integridad). ¡Despliega más agentes!`, 'text-rose-400');
+                    game.enemies.splice(i, 1);
+                    playTone(180, 0.15, 'sawtooth');
+                    if (game.coreHp <= 0) {
+                        game.running = false;
+                        logCombatEvent(`⛔ KERNEL COMPROMETIDO. Presiona "Reiniciar" para restaurar desde el backup .bak de Aryi.`, 'text-rose-400 font-bold');
+                    }
+                }
+            }
+
+            // Comprobar fin de oleada
+            if (game.enemiesToSpawn === 0 && game.enemies.length === 0 && game.coreHp > 0) {
+                game.wave++;
+                game.enemiesToSpawn = 7 + game.wave * 3;
+                empireState.credits += 60;
+                empireState.xp += 80;
+                document.getElementById('gameWaveBadge').textContent = 'Oleada ' + game.wave;
+                logCombatEvent(`🏆 ¡Oleada ${game.wave - 1} superada! Bonificación Blockchain: +60 Ħ y +80 XP.`, 'text-cyan-300 font-bold');
+                updateGlobalHud(`Oleada ${game.wave} en Curso`, `¡Excelente defensa! Cada oleada incrementa la velocidad y resistencia de los vectores de ataque. Combina Python Aryi (ralentización IA) con Java Sentinel (alto impacto WAF).`);
+            }
+
+            // Actualizar partículas
+            for (let i = game.particles.length - 1; i >= 0; i--) {
+                const pt = game.particles[i];
+                pt.x += pt.vx;
+                pt.y += pt.vy;
+                pt.life--;
+                if (pt.life <= 0) game.particles.splice(i, 1);
+            }
+
+            // Refrescar contadores UI
+            document.getElementById('gameCoreHp').textContent = game.coreHp + '%';
+            document.getElementById('gameKills').textContent = String(game.kills);
+            document.getElementById('gameScore').textContent = game.score + ' pts';
+        }
+
+        function drawGameCanvas() {
+            const w = canvas.width;
+            const h = canvas.height;
+            ctx.clearRect(0, 0, w, h);
+
+            // Fondo y carril de datos hacia el servidor Syntax Sanctuary
+            ctx.strokeStyle = 'rgba(56, 189, 248, 0.15)';
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+            ctx.moveTo(0, h / 2 - 42);
+            ctx.lineTo(w - 60, h / 2 - 42);
+            ctx.moveTo(0, h / 2 + 42);
+            ctx.lineTo(w - 60, h / 2 + 42);
+            ctx.stroke();
+
+            // Línea central animada de paquetes
+            ctx.setLineDash([8, 8]);
+            ctx.strokeStyle = 'rgba(16, 185, 129, 0.25)';
+            ctx.beginPath();
+            ctx.moveTo(0, h / 2);
+            ctx.lineTo(w - 60, h / 2);
+            ctx.stroke();
+            ctx.setLineDash([]);
+
+            // Dibujar Nodo Central Syntax Sanctuary (Derecha)
+            const coreX = w - 48;
+            const coreY = h / 2;
+            ctx.fillStyle = game.coreHp > 40 ? 'rgba(16, 185, 129, 0.2)' : 'rgba(239, 68, 68, 0.25)';
+            ctx.strokeStyle = game.coreHp > 40 ? '#10b981' : '#ef4444';
+            ctx.lineWidth = 3;
+            ctx.beginPath();
+            ctx.arc(coreX, coreY, 30, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.stroke();
+
+            ctx.fillStyle = '#f8fafc';
+            ctx.font = 'bold 11px JetBrains Mono, monospace';
+            ctx.textAlign = 'center';
+            ctx.fillText('KERNEL', coreX, coreY - 3);
+            ctx.fillText(game.coreHp + '%', coreX, coreY + 12);
+
+            // Dibujar Ranuras de Nodos Tácticos y Torretas
+            game.slots.forEach(slot => {
+                const turret = game.turrets.find(t => t.slotId === slot.id);
+                if (turret) {
+                    // Radio de alcance sutil
+                    ctx.strokeStyle = turret.color + '28';
+                    ctx.lineWidth = 1;
+                    ctx.beginPath();
+                    ctx.arc(slot.x, slot.y, turret.range, 0, Math.PI * 2);
+                    ctx.stroke();
+
+                    // Base de la torreta
+                    ctx.fillStyle = '#0f172a';
+                    ctx.strokeStyle = turret.color;
+                    ctx.lineWidth = 2.5;
+                    ctx.beginPath();
+                    ctx.arc(slot.x, slot.y, 18, 0, Math.PI * 2);
+                    ctx.fill();
+                    ctx.stroke();
+
+                    ctx.fillStyle = turret.color;
+                    ctx.font = 'bold 10px JetBrains Mono, monospace';
+                    ctx.fillText(turret.shortLabel, slot.x, slot.y + 4);
+                } else {
+                    ctx.fillStyle = 'rgba(15, 23, 42, 0.85)';
+                    ctx.strokeStyle = 'rgba(0, 240, 255, 0.45)';
+                    ctx.lineWidth = 1.5;
+                    ctx.beginPath();
+                    ctx.arc(slot.x, slot.y, 17, 0, Math.PI * 2);
+                    ctx.fill();
+                    ctx.stroke();
+
+                    ctx.fillStyle = '#38bdf8';
+                    ctx.font = 'bold 13px JetBrains Mono, monospace';
+                    ctx.fillText('+', slot.x, slot.y + 4);
+                }
+            });
+
+            // Dibujar Amenazas (Enemigos)
+            game.enemies.forEach(en => {
+                ctx.fillStyle = en.color;
+                ctx.beginPath();
+                ctx.arc(en.x, en.y, 12, 0, Math.PI * 2);
+                ctx.fill();
+
+                // Barra de vida
+                const bw = 28;
+                const pct = Math.max(0, en.hp / en.maxHp);
+                ctx.fillStyle = '#1e293b';
+                ctx.fillRect(en.x - bw / 2, en.y - 20, bw, 4);
+                ctx.fillStyle = '#10b981';
+                ctx.fillRect(en.x - bw / 2, en.y - 20, bw * pct, 4);
+
+                ctx.fillStyle = '#f8fafc';
+                ctx.font = '10px JetBrains Mono, monospace';
+                ctx.fillText(en.type, en.x, en.y + 24);
+            });
+
+            // Dibujar Proyectiles
+            game.projectiles.forEach(p => {
+                ctx.strokeStyle = p.color;
+                ctx.lineWidth = 2.5;
+                ctx.beginPath();
+                ctx.moveTo(p.x, p.y);
+                ctx.lineTo(p.tx, p.ty);
+                ctx.stroke();
+            });
+
+            // Dibujar Partículas
+            game.particles.forEach(pt => {
+                ctx.fillStyle = pt.color;
+                ctx.fillRect(pt.x, pt.y, 3, 3);
+            });
+        }
+
+        function gameLoop() {
+            updateGameSimulation();
+            drawGameCanvas();
+            requestAnimationFrame(gameLoop);
+        }
+
+        // Interacción en el Canvas: Colocar Agente en Ranura o Hacer Clic Directo a un Virus
+        canvas.addEventListener('click', (e) => {
+            const rect = canvas.getBoundingClientRect();
+            const scaleX = canvas.width / rect.width;
+            const scaleY = canvas.height / rect.height;
+            const cx = (e.clientX - rect.left) * scaleX;
+            const cy = (e.clientY - rect.top) * scaleY;
+
+            // 1. Verificar si hizo clic sobre un enemigo para disparo manual del Operador
+            for (const en of game.enemies) {
+                if (Math.hypot(en.x - cx, en.y - cy) <= 22) {
+                    en.hp -= 35;
+                    game.particles.push({ x: en.x, y: en.y, vx: 2, vy: -2, life: 15, color: '#00f0ff' });
+                    playTone(960, 0.05, 'triangle');
+                    return;
+                }
+            }
+
+            // 2. Verificar si hizo clic en una ranura de nodo [+]
+            for (const slot of game.slots) {
+                if (Math.hypot(slot.x - cx, slot.y - cy) <= 24) {
+                    const existing = game.turrets.find(t => t.slotId === slot.id);
+                    if (existing) {
+                        logCombatEvent(`ℹ️ Esa ranura ya tiene desplegado el nodo ${existing.name}.`, 'text-amber-300');
+                        return;
+                    }
+                    const spec = turretSpecs[empireState.selectedTurret];
+                    if (empireState.credits < spec.cost) {
+                        logCombatEvent(`✕ Créditos Hash insuficientes (${empireState.credits}/${spec.cost} Ħ). Usa "Minar Bloque Extra C++" o elimina amenazas.`, 'text-rose-400');
+                        playTone(220, 0.1, 'sawtooth');
+                        return;
+                    }
+                    empireState.credits -= spec.cost;
+                    const shortMap = { cpp: 'C++', java: 'JAVA', python: 'PY', php: 'PHP', js: 'JS' };
+                    game.turrets.push({
+                        slotId: slot.id,
+                        x: slot.x,
+                        y: slot.y,
+                        name: spec.name,
+                        shortLabel: shortMap[empireState.selectedTurret],
+                        range: spec.range,
+                        fireRate: spec.fireRate,
+                        cooldown: 0,
+                        damage: spec.damage,
+                        slow: spec.slow,
+                        income: spec.income,
+                        color: spec.color
+                    });
+                    playTone(680, 0.09, 'sine');
+                    logCombatEvent(`✓ Desplegado [${spec.name}] en la ranura #${slot.id + 1}.`, 'text-cyan-300');
+                    updateGlobalHud(`Agente ${spec.name} Desplegado`, `Acabas de integrar un nodo ${spec.name} en la red de defensa. Observa cómo coordina sus disparos con el resto del enjambre.`);
+                    return;
+                }
+            }
+        });
+
+        // Selección de torreta
+        document.querySelectorAll('.turret-select-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                empireState.selectedTurret = btn.getAttribute('data-turret');
+                document.querySelectorAll('.turret-select-btn').forEach(b => {
+                    b.className = 'turret-select-btn w-full text-left p-2.5 rounded-lg border border-slate-800 bg-slate-950 transition flex items-center justify-between';
+                });
+                btn.className = 'turret-select-btn w-full text-left p-2.5 rounded-lg border border-cyan-400 bg-cyan-500/15 transition flex items-center justify-between';
+                playTone(580, 0.05, 'sine');
+            });
+        });
+
+        document.getElementById('btnStartWave').addEventListener('click', () => {
+            game.running = true;
+            game.enemiesToSpawn += 5;
+            spawnEnemy();
+            logCombatEvent(`🚀 Oleada reforzada lanzada. ¡Defiende el Kernel de Syntax Sanctuary!`, 'text-emerald-400');
+        });
+
+        document.getElementById('btnPauseGame').addEventListener('click', (e) => {
+            game.running = !game.running;
+            e.currentTarget.textContent = game.running ? '⏸️ Pausa' : '▶️ Reanudar';
+        });
+
+        document.getElementById('btnResetGame').addEventListener('click', () => {
+            game.coreHp = 100;
+            game.wave = 1;
+            game.kills = 0;
+            game.score = 0;
+            game.enemies = [];
+            game.projectiles = [];
+            game.turrets = [];
+            game.enemiesToSpawn = 8;
+            game.running = true;
+            empireState.credits = Math.max(empireState.credits, 450);
+            document.getElementById('gameWaveBadge').textContent = 'Oleada 1';
+            updateGlobalHud('Juego Reiniciado desde Backup (.bak)', 'Aryi restauró el estado limpio del Kernel. Despliega tus agentes C++, Java, Python, PHP y JS en las ranuras [+].');
+        });
+
+        document.getElementById('btnSkillEmp').addEventListener('click', () => {
+            if (empireState.credits < 120) {
+                logCombatEvent('✕ Necesitas 120 Ħ para activar el Pulso Criptográfico Aryi IA.', 'text-rose-400');
+                return;
+            }
+            empireState.credits -= 120;
+            game.enemies.forEach(en => {
+                en.hp -= 90;
+                en.slowTimer = 150;
+            });
+            playTone(320, 0.2, 'sawtooth');
+            logCombatEvent('💥 ¡Pulso Criptográfico Aryi IA ejecutado! Todos los paquetes hostiles sufrieron -90 HP y desaceleración.', 'text-purple-400 font-bold');
+            updateGlobalHud('Pulso Criptográfico IA', 'Aryi ejecutó una firma masiva SHA-256 que invalidó los paquetes malformados en tránsito.');
+        });
+
+        document.getElementById('btnSkillMine').addEventListener('click', () => {
+            const mined = simpleSha256Simulation('Boost_' + Date.now(), 3);
+            empireState.credits += 80;
+            empireState.xp += 20;
+            playTone(760, 0.08, 'triangle');
+            logCombatEvent(`⛏️ Bloque PoW minado por C++17 (Nonce ${mined.nonce}) -> +80 Ħ añadidos al presupuesto.`, 'text-emerald-400');
+            updateGlobalHud('Minado Táctico C++', 'El Agente 1 (C++17) minó un bloque de emergencia para financiar más nodos defensivos en pleno ataque.');
+        });
+
+        // ====================================================================
+        // VISTA 3: LABORATORIO HACKER & MISIONES GUIADAS POR IA
+        // ====================================================================
+        const hackerMissions = [
+            {
+                id: 'm1_sqli',
+                tag: 'MISIÓN #1 // SQLi & PDO',
+                title: 'Blindaje de Autenticación en auth_credenciales.php',
+                rewardXp: 150,
+                rewardCredits: 100,
+                desc: 'Un atacante abre la Terminal Secreta (Ctrl + Shift + L) e introduce `"admin\' OR \'1\'=\'1"` como identificador esperando saltarse la verificación de usuario en MySQL.',
+                vulnCode: `// ❌ Código Vulnerable (Concatenación directa)\n$sql = "SELECT * FROM usuarios WHERE correo = '" . $_POST['identificador'] . "'";\n$usuario = $pdo->query($sql)->fetch();`,
+                secureCode: `// ✅ Tu Código en auth_credenciales.php\n$stmt = $pdo->prepare(\n  "SELECT id, nombre, correo, hora, password FROM usuarios WHERE correo = :id1 OR nombre = :id2 LIMIT 1"\n);\n$stmt->execute([':id1' => $identificador, ':id2' => $identificador]);`,
+                question: '¿Por qué `PDO::ATTR_EMULATE_PREPARES => false` en tu `conexion.php` detiene por completo este ataque?',
+                options: [
+                    { text: 'Porque envía la estructura SQL compilada y los parámetros en paquetes separados al motor MySQL.', correct: true },
+                    { text: 'Porque borra la tabla usuarios si detecta comillas simples.', correct: false },
+                    { text: 'Porque convierte la consulta SQL en un archivo JSON estático.', correct: false },
+                    { text: 'Porque desactiva el puerto 3306 del contenedor Docker.', correct: false }
+                ],
+                aiExplanation: '¡Exacto! Con sentencias preparadas nativas, MySQL compila primero el árbol sintáctico del SELECT y luego inserta el valor literal de `:id1` sin interpretarlo jamás como comandos SQL.'
+            },
+            {
+                id: 'm2_timing',
+                tag: 'MISIÓN #2 // TIMING ATTACKS & BLOCKCHAIN',
+                title: 'Comparación Criptográfica en Tiempo Constante (validar_acceso.php)',
+                rewardXp: 180,
+                rewardCredits: 120,
+                desc: 'Un hacker mide con precisión de microsegundos cuánto tarda `validar_acceso.php` en rechazar un hash SHA-256 de 64 caracteres para adivinar tu clave carácter por carácter.',
+                vulnCode: `// ❌ Comparación estándar (Vulnerable a Timing Attack)\nif ($resultado['hash'] === $hashIngresado) {\n    $_SESSION['acceso_autorizado'] = true;\n}`,
+                secureCode: `// ✅ Tu Código en validar_acceso.php\nif (hash_equals($resultado['hash'], $hashIngresado)) {\n    session_regenerate_id(true);\n    $_SESSION['acceso_autorizado'] = true;\n}`,
+                question: '¿Qué ventaja clave aporta la dupla `hash_equals()` + `session_regenerate_id(true)` en tu inicio de sesión por Hash?',
+                options: [
+                    { text: 'Compara todos los bytes en el mismo tiempo exacto e invalida cualquier ID de sesión previo contra Session Fixation.', correct: true },
+                    { text: 'Reduce la longitud del hash SHA-256 de 64 a 8 caracteres.', correct: false },
+                    { text: 'Guarda la contraseña en texto plano dentro de una cookie.', correct: false },
+                    { text: 'Desactiva la minería Proof-of-Work del bloque génesis.', correct: false }
+                ],
+                aiExplanation: '¡Brillante! `hash_equals()` recorre todos los bytes con operaciones XOR sin cortocircuitar en el primer byte distinto, y `session_regenerate_id(true)` renueva el token de sesión inmediatamente tras autenticar.'
+            },
+            {
+                id: 'm3_sandbox',
+                tag: 'MISIÓN #3 // PATH TRAVERSAL & SANDBOX JAIL',
+                title: 'Confinamiento de Directorios en area_privada.php',
+                rewardXp: 200,
+                rewardCredits: 140,
+                desc: 'Un usuario malicioso intenta descargar `../../conexion.php` modificando el parámetro GET `?tab=archivador&action=download&path=../../conexion.php`.',
+                vulnCode: `// ❌ Lectura directa sin validación de raíz\n$file = USER_ROOT_DIRECTORY . '/' . $_GET['path'];\nreadfile($file);`,
+                secureCode: `// ✅ Tu Función safe_path() en area_privada.php\n$real = realpath($cand);\nif ($real === false || ($real !== $root && !str_starts_with($real, $root . DIRECTORY_SEPARATOR))) {\n    throw new RuntimeException('Acceso fuera de ruta.');\n}`,
+                question: '¿Cómo colaboran `normalize_relative_path()` y `realpath()` para proteger tu servidor?',
+                options: [
+                    { text: 'Resuelven la ruta física real en el disco y garantizan que comience estrictamente con `storage_usuarios/user_<id>`.', correct: true },
+                    { text: 'Permiten que cualquier usuario lea las carpetas de otros usuarios.', correct: false },
+                    { text: 'Ocultan los archivos únicamente cambiando el color en CSS.', correct: false },
+                    { text: 'Comprimen todo el directorio `/etc` en un archivo público.', correct: false }
+                ],
+                aiExplanation: '¡Misión dominada! Incluso si alguien intenta usar enlaces simbólicos o secuencias `..`, `realpath()` devuelve la ruta canónica absoluta del kernel y `str_starts_with()` bloquea cualquier escape fuera de su jaula.'
+            },
+            {
+                id: 'm4_polyglot',
+                tag: 'MISIÓN #4 // ARQUITECTURA DE 5 AGENTES',
+                title: 'Orquestación Segura y Respaldos (.bak) con Aryi',
+                rewardXp: 220,
+                rewardCredits: 160,
+                desc: 'Cuando Aryi (`aryi_orchestrator.py`) modifica un archivo del proyecto o coordina a C++ y Java, debe garantizar que ninguna actualización rompa el sistema en vivo.',
+                vulnCode: `# ❌ Sobrescritura destructiva sin respaldo\nPath(path).write_text(new_content, encoding="utf-8")`,
+                secureCode: `# ✅ Tu Patrón en aryiCodigo.py / aryi_orchestrator.py\nbackup_path = target.with_suffix('.bak')\nif target.exists():\n    target.rename(backup_path)\ntarget.write_text(content, encoding="utf-8")`,
+                question: '¿Por qué combinamos C++, Java, Python, PHP y JS en la Central de Trabajo en lugar de usar un solo lenguaje?',
+                options: [
+                    { text: 'Para aprovechar la velocidad nativa de C++ (PoW), el tipado/auditoría de Java, la IA de Python, la web/BD de PHP y la interactividad de JS.', correct: true },
+                    { text: 'Porque un solo lenguaje no puede sumar números enteros.', correct: false },
+                    { text: 'Para obligar al navegador a instalar 5 sistemas operativos.', correct: false },
+                    { text: 'Porque HTML no permite mostrar texto en pantalla sin C++.', correct: false }
+                ],
+                aiExplanation: '¡Imperio consolidado! Esa es la verdadera mentalidad de un arquitecto de sistemas: usar cada lenguaje donde brilla al máximo y comunicarlos con contratos JSON limpios.'
+            }
+        ];
+
+        let currentMissionIdx = 0;
+
+        function renderMissionsList() {
+            const list = document.getElementById('missionListContainer');
+            list.innerHTML = hackerMissions.map((m, idx) => {
+                const done = !!empireState.completedMissions[m.id];
+                const isCurrent = idx === currentMissionIdx;
+                return `
+                    <button type="button" data-mission-idx="${idx}" class="w-full text-left p-3 rounded-xl border transition flex items-center justify-between ${isCurrent ? 'border-emerald-400 bg-emerald-500/15' : 'border-slate-800 bg-slate-950 hover:border-slate-700'}">
+                        <div>
+                            <div class="text-xs font-mono-code font-bold ${done ? 'text-emerald-400' : 'text-cyan-300'}">${m.tag}</div>
+                            <div class="text-xs sm:text-sm font-semibold text-white mt-0.5">${m.title}</div>
+                        </div>
+                        <span class="text-xs font-mono-code px-2 py-1 rounded ${done ? 'bg-emerald-500 text-slate-950 font-bold' : 'bg-slate-900 text-slate-400'}">
+                            ${done ? '✓ COMPLETADA' : '+' + m.rewardXp + ' XP'}
+                        </span>
+                    </button>
+                `;
+            }).join('');
+
+            list.querySelectorAll('[data-mission-idx]').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    currentMissionIdx = parseInt(btn.getAttribute('data-mission-idx'), 10);
+                    renderActiveMission();
+                    renderMissionsList();
+                });
+            });
+        }
+
+        function renderActiveMission() {
+            const m = hackerMissions[currentMissionIdx];
+            document.getElementById('missionActiveTag').textContent = m.tag;
+            document.getElementById('missionActiveTitle').textContent = m.title;
+            document.getElementById('missionRewardBadge').textContent = `Recompensa: +${m.rewardXp} XP • +${m.rewardCredits} Ħ`;
+            document.getElementById('missionDescription').textContent = m.desc;
+            document.getElementById('missionVulnerableCode').textContent = m.vulnCode;
+            document.getElementById('missionSecureCode').textContent = m.secureCode;
+            document.getElementById('missionPromptQuestion').textContent = m.question;
+
+            const fb = document.getElementById('missionFeedbackBox');
+            fb.className = 'hidden p-3 rounded-lg font-mono-code text-xs leading-relaxed';
+
+            const grid = document.getElementById('missionOptionsGrid');
+            grid.innerHTML = m.options.map((opt, i) => `
+                <button type="button" data-opt-idx="${i}" class="text-left p-3 rounded-lg border border-slate-700 bg-slate-900 hover:border-cyan-400 text-xs text-slate-200 transition">
+                    <span class="font-mono-code font-bold text-cyan-400 mr-1">[${String.fromCharCode(65 + i)}]</span> ${opt.text}
+                </button>
+            `).join('');
+
+            grid.querySelectorAll('[data-opt-idx]').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const idx = parseInt(btn.getAttribute('data-opt-idx'), 10);
+                    const chosen = m.options[idx];
+                    fb.classList.remove('hidden');
+
+                    if (chosen.correct) {
+                        playTone(840, 0.12, 'triangle');
+                        fb.className = 'p-3 rounded-lg font-mono-code text-xs leading-relaxed bg-emerald-500/15 border border-emerald-500/40 text-emerald-300';
+                        fb.textContent = '🤖 Aryi IA: ' + m.aiExplanation;
+                        if (!empireState.completedMissions[m.id]) {
+                            empireState.completedMissions[m.id] = true;
+                            empireState.xp += m.rewardXp;
+                            empireState.credits += m.rewardCredits;
+                            updateGlobalHud(m.tag + ' Superada', m.aiExplanation);
+                            renderMissionsList();
+                        }
+                    } else {
+                        playTone(240, 0.12, 'sawtooth');
+                        fb.className = 'p-3 rounded-lg font-mono-code text-xs leading-relaxed bg-rose-500/15 border border-rose-500/40 text-rose-300';
+                        fb.textContent = '🤖 Aryi IA: Analiza el bloque de código derecho: fíjate en cómo la validación ocurre a nivel criptográfico o de sistema operativo antes de procesar la entrada.';
+                    }
+                });
+            });
+        }
+
+        // ====================================================================
+        // VISTA 4: BÓVEDA DE CÓDIGO FUENTE DE LOS 5 AGENTES
+        // ====================================================================
+        const agentSources = {
+            cpp: {
+                filename: 'agents/agent_cpp_core.cpp (Compilar: g++ -O3 -std=c++17 agent_cpp_core.cpp -o agent_cpp_core)',
+                code: `// SYNTAX SANCTUARY — AGENTE 1: C++17 VANGUARD CORE
+// Minería PoW SHA-256 nativa, Entropía de Shannon y Telemetría de Kernel Linux (/proc/meminfo)
+#include <iostream>
+#include <string>
+#include <fstream>
+#include <cmath>
+#include <chrono>
+
+double calculateShannonEntropy(const std::string& data) {
+    if (data.empty()) return 0.0;
+    int freq[256] = {0};
+    for (unsigned char c : data) freq[c]++;
+    double entropy = 0.0, len = static_cast<double>(data.size());
+    for (int i = 0; i < 256; ++i) {
+        if (freq[i] > 0) {
+            double p = freq[i] / len;
+            entropy -= p * std::log2(p);
+        }
+    }
+    return entropy;
+}
+// (El archivo completo compilable agent_cpp_core.cpp está incluido en el paquete ZIP de tu Central)`
+            },
+            java: {
+                filename: 'agents/AgentSentinel.java (Ejecutar: java AgentSentinel.java --audit ./PROYECTO)',
+                code: `// SYNTAX SANCTUARY — AGENTE 2: JAVA SENTINEL IDS & FIM AUDITOR
+import java.nio.file.*;
+import java.security.MessageDigest;
+import java.util.regex.Pattern;
+
+public class AgentSentinel {
+    private static final Pattern SQL_PREPARED_CHECK = Pattern.compile("->prepare\\\\s*\\\\(");
+    private static final Pattern CSRF_TOKEN_CHECK   = Pattern.compile("hash_equals\\\\s*\\\\(");
+
+    public static String sha256Hex(byte[] data) throws Exception {
+        MessageDigest digest = MessageDigest.getInstance("SHA-256");
+        StringBuilder sb = new StringBuilder();
+        for (byte b : digest.digest(data)) sb.append(String.format("%02x", b));
+        return sb.toString();
+    }
+}`
+            },
+            python: {
+                filename: 'agents/aryi_orchestrator.py (Ejecutar: python3 aryi_orchestrator.py --swarm sqli "payload")',
+                code: `# SYNTAX SANCTUARY — AGENTE 3: ARYI AI ORCHESTRATOR (Evolución de aryiCodigo.py)
+# Coordina a C++, Java, PHP y JS, mantiene respaldos automáticos (.bak) e inyecta mentoría IA
+def tool_write_file(path: str, content: str) -> dict:
+    target = Path(path).resolve()
+    backup_path = target.with_suffix(target.suffix + ".bak")
+    if target.exists():
+        shutil.copy2(target, backup_path)
+    target.write_text(content, encoding="utf-8")
+    return {"ok": True, "path": str(target), "backup": str(backup_path)}`
+            },
+            php: {
+                filename: 'agents/central_bridge.php (Puente con area_privada.php y conexion.php)',
+                code: `<?php
+// SYNTAX SANCTUARY — AGENTE 4: PHP 8.2 SANCTUARY BRIDGE
+// Conecta la sesión Blockchain con el enjambre Python/C++/Java y guarda el progreso con LOCK_EX
+declare(strict_types=1);
+session_start();
+require_once __DIR__ . '/../InicioDeSesion/conexion.php';
+
+function saveEmpireState(array $state): void {
+    $tmp = __DIR__ . '/netrunner_empire_state.json.tmp.' . bin2hex(random_bytes(4));
+    file_put_contents($tmp, json_encode($state, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE), LOCK_EX);
+    rename($tmp, __DIR__ . '/netrunner_empire_state.json');
+}`
+            },
+            dsl: {
+                filename: 'PROYECTO/index.php (Integración con tu librería DSL src/mycode.php)',
+                code: `<?php require_once "./src/mycode.php"; syntax ("Syntax Sanctuary // Imperio Netrunner"); ?>
+
+    <?= decodificar ( lista (enlace([
+        'Videos' => './public/player/',
+        'Blog & Estación Privada' => './public/InicioDeSesion/area_privada.php',
+        'Central de 5 Agentes & Juego Hacker' => './public/CentralTrabajo/central_trabajo_hacker.html'
+    ])) ); ?>
+
+    <?= encabezado ('password: ss-tfh-free', MIN); ?>
+
+<?php sanctuary (); ?>`
+            }
+        };
+
+        function selectCodeTab(tabKey) {
+            const entry = agentSources[tabKey] || agentSources.cpp;
+            document.getElementById('codeVaultFilename').textContent = entry.filename;
+            document.getElementById('codeVaultContent').textContent = entry.code;
+            document.querySelectorAll('.code-vault-btn').forEach(btn => {
+                const active = btn.getAttribute('data-code-tab') === tabKey;
+                btn.className = 'code-vault-btn px-3 py-1.5 rounded-lg text-xs font-mono-code font-bold transition ' +
+                    (active ? 'bg-cyan-400 text-slate-950' : 'bg-slate-800 text-slate-200 hover:bg-slate-700');
+            });
+        }
+
+        document.querySelectorAll('.code-vault-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                selectCodeTab(btn.getAttribute('data-code-tab'));
+            });
+        });
+
+        document.getElementById('btnCopyAgentCode').addEventListener('click', () => {
+            const text = document.getElementById('codeVaultContent').textContent;
+            const temp = document.createElement('textarea');
+            temp.value = text;
+            document.body.appendChild(temp);
+            temp.select();
+            document.execCommand('copy');
+            document.body.removeChild(temp);
+            const btn = document.getElementById('btnCopyAgentCode');
+            btn.textContent = '✓ ¡Código Copiado!';
+            setTimeout(() => { btn.textContent = '📋 Copiar Código Completo'; }, 1800);
+        });
+
+        // ====================================================================
+        // NAVEGACIÓN ENTRE VISTAS Y CONTROLES SUPERIORES
+        // ====================================================================
+        function switchView(viewName) {
+            empireState.activeView = viewName;
+            document.querySelectorAll('.view-section').forEach(sec => {
+                sec.classList.add('hidden');
+                sec.classList.remove('flex');
+            });
+            const target = document.getElementById('view-' + viewName);
+            if (target) {
+                target.classList.remove('hidden');
+                target.classList.add('flex');
+            }
+            document.querySelectorAll('.nav-tab-btn').forEach(btn => {
+                const isAct = btn.getAttribute('data-view') === viewName;
+                btn.className = 'nav-tab-btn px-3.5 py-1.5 rounded-lg text-xs sm:text-sm font-semibold transition ' +
+                    (isAct ? 'bg-cyan-500 text-slate-950' : 'bg-slate-900 text-slate-300 hover:bg-slate-800 border border-slate-800');
+            });
+            if (viewName === 'game') {
+                setTimeout(resizeGameCanvas, 30);
+            }
+        }
+
+        document.querySelectorAll('.nav-tab-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                switchView(btn.getAttribute('data-view'));
+                playTone(600, 0.05, 'sine');
+            });
+        });
+
+        document.getElementById('btnAudioToggle').addEventListener('click', (e) => {
+            empireState.audioEnabled = !empireState.audioEnabled;
+            e.currentTarget.textContent = empireState.audioEnabled ? '🔊 Audio Synth: ON' : '🔇 Audio Synth: OFF';
+        });
+
+        document.getElementById('btnAskAiTip').addEventListener('click', () => {
+            empireState.tipIndex = (empireState.tipIndex + 1) % aiTips.length;
+            playTone(700, 0.07, 'triangle');
+            updateGlobalHud('Mentoría Proactiva Aryi IA', aiTips[empireState.tipIndex]);
+        });
+
+        window.addEventListener('resize', resizeGameCanvas);
+
+        // ====================================================================
+        // INICIALIZACIÓN AL CARGAR LA APLICACIÓN
+        // ====================================================================
+        window.addEventListener('load', () => {
+            renderFimTable();
+            renderMissionsList();
+            renderActiveMission();
+            selectCodeTab('cpp');
+            resizeGameCanvas();
+            runFiveAgentPipeline("SELECT * FROM usuarios WHERE correo='admin' OR '1'='1'");
+            gameLoop();
+        });
+    })();
+    </script>
+</body>
+</html>

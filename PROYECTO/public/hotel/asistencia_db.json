@@ -1,0 +1,213 @@
+{
+    "users": [
+        "Ramiro Garcia Gonzalez"
+    ],
+    "tarifas": {
+        "Ramiro Garcia Gonzalez": 15
+    },
+    "entries": [
+        {
+            "user": "Ramiro Garcia Gonzalez",
+            "date": "09/14/2026",
+            "time_in": "07:05 AM",
+            "time_out": "05:12 PM",
+            "is_holiday": false
+        },
+        {
+            "user": "Ramiro Garcia Gonzalez",
+            "date": "09/15/2026",
+            "time_in": "07:54 AM",
+            "time_out": "05:04 PM",
+            "is_holiday": false
+        },
+        {
+            "user": "Ramiro Garcia Gonzalez",
+            "date": "09/16/2026",
+            "time_in": "06:45 AM",
+            "time_out": "02:00 PM",
+            "is_holiday": true
+        },
+        {
+            "user": "Ramiro Garcia Gonzalez",
+            "date": "09/19/2026",
+            "time_in": "07:00 AM",
+            "time_out": "03:06 PM",
+            "is_holiday": false
+        },
+        {
+            "user": "Ramiro Garcia Gonzalez",
+            "date": "09/20/2026",
+            "time_in": "08:00 AM",
+            "time_out": "04:00 PM",
+            "is_holiday": false
+        },
+        {
+            "user": "Ramiro Garcia Gonzalez",
+            "date": "09/21/2026",
+            "time_in": "06:55 AM",
+            "time_out": "03:00 PM",
+            "is_holiday": false
+        },
+        {
+            "user": "Ramiro Garcia Gonzalez",
+            "date": "09/22/2026",
+            "time_in": "07:00 AM",
+            "time_out": "03:00 PM",
+            "is_holiday": false
+        },
+        {
+            "user": "Ramiro Garcia Gonzalez",
+            "date": "09/23/2026",
+            "time_in": "07:00 AM",
+            "time_out": "03:00 PM",
+            "is_holiday": false
+        },
+        {
+            "user": "Ramiro Garcia Gonzalez",
+            "date": "09/26/2026",
+            "time_in": "07:00 AM",
+            "time_out": "03:00 PM",
+            "is_holiday": false
+        },
+        {
+            "user": "Ramiro Garcia Gonzalez",
+            "date": "09/27/2026",
+            "time_in": "08:27 AM",
+            "time_out": "04:00 PM",
+            "is_holiday": false
+        },
+        {
+            "user": "Ramiro Garcia Gonzalez",
+            "date": "09/28/2026",
+            "time_in": "07:00 AM",
+            "time_out": "03:00 PM",
+            "is_holiday": false
+        },
+        {
+            "user": "Ramiro Garcia Gonzalez",
+            "date": "09/29/2026",
+            "time_in": "5:47 AM",
+            "time_out": "4:58 PM",
+            "is_holiday": false
+        },
+        {
+            "user": "Ramiro Garcia Gonzalez",
+            "date": "09/30/2026",
+            "time_in": "07:00 AM",
+            "time_out": "2:59 PM",
+            "is_holiday": false
+        },
+        {
+            "user": "Ramiro Garcia Gonzalez",
+            "date": "10/02/2026",
+            "time_in": "10:31 AM",
+            "time_out": "3:01 PM",
+            "is_holiday": false
+        },
+        {
+            "user": "Ramiro Garcia Gonzalez",
+            "date": "10/03/2026",
+            "time_in": "6:32 AM",
+            "time_out": "2:59 PM",
+            "is_holiday": false
+        },
+        {
+            "user": "Ramiro Garcia Gonzalez",
+            "date": "10/04/2026",
+            "time_in": "7:21 AM",
+            "time_out": "4:02 PM",
+            "is_holiday": false
+        },
+        {
+            "user": "Ramiro Garcia Gonzalez",
+            "date": "10/05/2026",
+            "time_in": "6:24 AM",
+            "time_out": "2:59 PM",
+            "is_holiday": false
+        },
+        {
+            "user": "Ramiro Garcia Gonzalez",
+            "date": "10/06/2026",
+            "time_in": "6:49 AM",
+            "time_out": "2:58 PM",
+            "is_holiday": false
+        },
+        {
+            "user": "Ramiro Garcia Gonzalez",
+            "date": "10/07/2026",
+            "time_in": "6:41 AM",
+            "time_out": "3:00 PM",
+            "is_holiday": false
+        },
+        {
+            "user": "Ramiro Garcia Gonzalez",
+            "date": "10/10/2026",
+            "time_in": "6:55 AM",
+            "time_out": "2:53 PM",
+            "is_holiday": false
+        },
+        {
+            "user": "Ramiro Garcia Gonzalez",
+            "date": "10/11/2026",
+            "time_in": "8:04 AM",
+            "time_out": "3:59 PM",
+            "is_holiday": false
+        },
+        {
+            "user": "Ramiro Garcia Gonzalez",
+            "date": "10/12/2026",
+            "time_in": "6:41 AM",
+            "time_out": "4:35 PM",
+            "is_holiday": false
+        },
+        {
+            "user": "Ramiro Garcia Gonzalez",
+            "date": "10/13/2026",
+            "time_in": "6:52 AM",
+            "time_out": "2:57 PM",
+            "is_holiday": false
+        },
+        {
+            "user": "Ramiro Garcia Gonzalez",
+            "date": "10/14/2026",
+            "time_in": "7:02 AM",
+            "time_out": "3:05 PM",
+            "is_holiday": false
+        },
+        {
+            "user": "Ramiro Garcia Gonzalez",
+            "date": "10/17/2026",
+            "time_in": "6:58 AM",
+            "time_out": "3:35 PM",
+            "is_holiday": false
+        },
+        {
+            "user": "Ramiro Garcia Gonzalez",
+            "date": "10/18/2026",
+            "time_in": "7:50 AM",
+            "time_out": "3:59 PM",
+            "is_holiday": false
+        },
+        {
+            "user": "Ramiro Garcia Gonzalez",
+            "date": "10/19/2026",
+            "time_in": "6:40 AM",
+            "time_out": "2:59 PM",
+            "is_holiday": false
+        },
+        {
+            "user": "Ramiro Garcia Gonzalez",
+            "date": "10/20/2026",
+            "time_in": "7:01 AM",
+            "time_out": "3:01 PM",
+            "is_holiday": false
+        },
+        {
+            "user": "Ramiro Garcia Gonzalez",
+            "date": "10/21/2026",
+            "time_in": "7:01 AM",
+            "time_out": "3:00 PM",
+            "is_holiday": false
+        }
+    ]
+}
